@@ -7,7 +7,7 @@ const engine = express();
 const port = 3001;
 
 engine.use(cors({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000','chrome-extension://pmgmglmdclpaipolmofbkjbigaabcohj']
 }));
 
 engine.use(express.json());

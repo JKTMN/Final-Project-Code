@@ -1,27 +1,22 @@
 {
     "manifest_version": 3,
     "name": "My React Extension",
-    "description": "A simple React Chrome extension",
     "version": "1.0",
-    "background": {
-      "service_worker": "background.js"
-    },
-    "permissions": [
-      "storage",
-      "tabs"
-    ],
-    "icons": {
-      "16": "./icons/icon16.png",
-      "32": "./icons/icon32.png"
-    },
-    "host_permissions": [
-      "http://*/*", "https://*/*"
-    ],
+    "description": "A simple Chrome extension that opens a new tab with a React app.",
     "action": {
       "default_icon": {
-        "16": "./icons/icon16.png",
-        "32": "./icons/icon32.png"
+        "16": "icons/icon16.png",
+        "32": "icons/icon32.png"
       }
-    }
+    },
+    "background": {
+      "service_worker": "/background.js"
+    },
+    "permissions": ["tabs"],
+    "web_accessible_resources": [
+      {
+        "resources": ["index.html", "static/*"],
+        "matches": ["<all_urls>"]
+      }
+    ]
   }
-  
