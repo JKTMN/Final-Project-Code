@@ -32,7 +32,7 @@ const testsRanData = [
 const TestsRanList = () => {
   return (
     <Box sx={{ padding: 2, height: "100%", overflow: "hidden" }}>
-      <Typography variant="h2" sx={{ fontSize: "1.5rem", fontWeight: 600, marginBottom: 2 }}>
+      <Typography variant="h4" sx={{ fontSize: "1.5rem", fontWeight: 600, marginBottom: 2 }}>
         Tests Ran
       </Typography>
 

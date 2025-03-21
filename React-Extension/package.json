@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@axe-core/puppeteer": "^4.10.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.4.8",
@@ -12,6 +13,8 @@
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^13.5.0",
     "axe-core": "^4.10.3",
+    "axios": "^1.8.4",
+    "express": "^4.21.2",
     "puppeteer": "^24.4.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

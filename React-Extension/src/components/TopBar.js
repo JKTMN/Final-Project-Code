@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { AppBar, Toolbar, Typography, TextField, Button, Box } from "@mui/material";
 
-const TopBar = () => {
+const TopBar = ({ onSubmit }) => {
+  const [url, setUrl] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (url) {
+      onSubmit(url);
+    }
+  };
+
   return (
     <AppBar position="static" sx={{ backgroundColor: "#23222F", padding: 2 }}>
-      <Toolbar sx={{ display: "flex", justifyContent: "center", alignItems: "center", position: "relative" }}>
+      <Toolbar sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
         <Typography variant="h1" sx={{ color: "#F5F5F5", fontSize: "1.75rem", position: "absolute", left: 20 }}>
           Dashboard
         </Typography>
@@ -17,10 +26,16 @@ const TopBar = () => {
             <TextField
               variant="outlined"
               size="small"
-              placeholder="Enter text..."
+              placeholder="Enter URL..."
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
               sx={{ backgroundColor: "white", borderRadius: "4px" }}
             />
-            <Button variant="contained" sx={{ backgroundColor: "#21A0C0", color: "white", "&:hover": { backgroundColor: "#1984a0" } }}>
+            <Button
+              variant="contained"
+              sx={{ backgroundColor: "#21A0C0", color: "white", "&:hover": { backgroundColor: "#1984a0" } }}
+              onClick={handleSubmit}
+            >
               Submit
             </Button>
           </Box>

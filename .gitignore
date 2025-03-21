@@ -1,1 +1,4 @@
-/node_modules
+/React-Extension/node_modules
+/aXe-engine/node_modules
+/React-Extension/build
+/public/build
