@@ -4,6 +4,7 @@ import theme from "./theme";
 import TopBar from "./components/TopBar";
 import MainContent from "./components/MainContent";
 import { handleAxeApiCall } from "./functions/handleAxeApiCall";
+import ViolationModal from "./components/ViolationModal";
 
 /**
  * @file This s the main entry point for the React app.

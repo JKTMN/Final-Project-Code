@@ -32,13 +32,17 @@ engine.post('/api/audit', async (req, res) => {
         await page.goto(url);
 
         const results = await new AxePuppeteer(page).analyze();
-        console.log(results);
+        console.log(JSON.stringify(results, null, 2));
 
         const violations = (results.violations || []).map(violation => {
             return {
                 id: violation.id,
+                impact: violation.impact,
                 description: violation.description,
+                help: violation.help,
+                helpUrl: violation.helpUrl,
                 nodes: violation.nodes.map(node => ({
+                    html: node.html,
                     message: node.any ? node.any.map(error => error.message).join(', ') : '',
                     target: node.target
                 }))
@@ -55,7 +59,8 @@ engine.post('/api/audit', async (req, res) => {
             description: test.description || "No description available"
         }));
 
-        console.log('Tests Ran: ', testsRun);
+        // console.log('Violations Found: ', violations);
+        // console.log('Tests Ran: ', testsRun);
 
         await browser.close();
 

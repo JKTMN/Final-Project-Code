@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Typography, Card, CardContent, Button, Divider } from "@mui/material";
+import ViolationModal from "./ViolationModal";
 
 /**
  * The ViolationList components displays the list of violations found in the audit.
@@ -12,6 +13,19 @@ import { Box, Typography, Card, CardContent, Button, Divider } from "@mui/materi
  * @see https://mui.com/material-ui/react-typography/
  */
 const ViolationsList = ({ violations }) => {
+  const [open, setOpen] = useState(false);
+  const [selectedViolation, setSelectedViolation] = useState(null);
+
+  const handleOpen = (violation) => {
+    setSelectedViolation(violation);  
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedViolation(null);
+  };
+
   return (
     <Box>
       <Typography variant="h4" sx={{ marginBottom: 2, fontWeight: 'bold', textAlign: 'center', pt: 1 }}>
@@ -72,8 +86,7 @@ const ViolationsList = ({ violations }) => {
                   "&:hover": { backgroundColor: "#1984a0" },
                   borderRadius: "8px", 
                 }}
-                onClick={() => alert(`Fixing violation: ${violation.id}`)}
-              >
+                onClick={() => handleOpen(violation)}>
                 Fix This Violation
               </Button>
             </Box>
@@ -81,6 +94,7 @@ const ViolationsList = ({ violations }) => {
         ))
       )}
       <Divider sx={{ marginTop: 2 }} />
+      <ViolationModal open={open} handleClose={handleClose} violation={selectedViolation} />
     </Box>
   );
 };
