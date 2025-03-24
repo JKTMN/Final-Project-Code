@@ -1,6 +1,13 @@
 import React from 'react';
 import { Box } from "@mui/material";
 
+/**
+ * This component renders a web iframe that displays the queried url for audit.
+ * @param {*} url - The queried url for audit and render.
+ * @returns The rendered iframe displaying the queried url.
+ * 
+ * @see https://www.npmjs.com/package/react-iframe
+ */
 const WebIframe = ({url}) => {
     return (
         <Box

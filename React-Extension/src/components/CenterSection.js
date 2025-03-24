@@ -2,6 +2,12 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import WebIframe from "./WebIframe";
 
+/**
+ * This component renders the queried url for audit in an iframe in the centre of the page.
+ * @param {*} url - The queried url for audit and render. 
+ * @returns The rendered iframe displaying the queried url.
+ * 
+ */
 const CenterSection = ({ url }) => {
   return (
     <Box
@@ -11,7 +17,7 @@ const CenterSection = ({ url }) => {
       }}
     >
       <Typography variant="h4" sx={{ fontWeight: 700, marginBottom: 2, textAlign: "center" }}>
-        Title
+        {url}
       </Typography>
         <WebIframe url={url} />
     </Box>

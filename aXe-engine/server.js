@@ -1,3 +1,10 @@
+/**
+ * Acts as an API server for running accessibility audits using aXe.
+ * @param {req} String - The URL passed in the request body.
+ * @param {res} Object - The response object.
+ * @returns {Object} - Returns an object containing the violations found in the audit.
+ * Based on {@link https://github.com/dequelabs/axe-puppeteer}
+ */
 const express = require('express');
 const puppeteer = require('puppeteer');
 const { AxePuppeteer } = require('axe-puppeteer');
@@ -25,13 +32,11 @@ engine.post('/api/audit', async (req, res) => {
         await page.goto(url);
 
         const results = await new AxePuppeteer(page).analyze();
-
-        await browser.close();
+        console.log(results);
 
         const violations = (results.violations || []).map(violation => {
             return {
                 id: violation.id,
-                impact: violation.impact,
                 description: violation.description,
                 nodes: violation.nodes.map(node => ({
                     message: node.any ? node.any.map(error => error.message).join(', ') : '',
@@ -40,7 +45,21 @@ engine.post('/api/audit', async (req, res) => {
             };
         });
 
-        res.json({ violations });
+        const testsRun = [
+            ...results.passes,
+            ...results.violations,
+            ...results.inapplicable
+        ].map(test => ({
+            id: test.id,
+            title: test.help,
+            description: test.description || "No description available"
+        }));
+
+        console.log('Tests Ran: ', testsRun);
+
+        await browser.close();
+
+        res.json({ violations, testsRun });
     } catch (error) {
         console.error('Error running accessibility audit:', error);
         res.status(500).json({ error: 'Failed to run accessibility audit' });

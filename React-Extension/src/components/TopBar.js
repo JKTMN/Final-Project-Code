@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { AppBar, Toolbar, Typography, TextField, Button, Box } from "@mui/material";
 
+/**
+ * This component is a header for the webpage which displays a title and input form for the user to enter a URL.
+ * @param {*} onSubmit The function to call when the user submits a URL.
+ * @returns The rendered header component.
+ * 
+ * @see https://mui.com/material-ui/react-app-bar/
+ */
 const TopBar = ({ onSubmit }) => {
   const [url, setUrl] = useState("");
 

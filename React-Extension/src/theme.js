@@ -1,5 +1,11 @@
 import { createTheme } from "@mui/material/styles";
 
+/**
+ * A custom theme for this app which can be used throughout the app.
+ * The theme is created using the createTheme function from MUI.
+ * 
+ * @see https://mui.com/material-ui/customization/theming/
+ */
 const theme = createTheme({
   palette: {
     primary: {

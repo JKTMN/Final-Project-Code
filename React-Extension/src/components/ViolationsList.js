@@ -1,15 +1,25 @@
 import React from "react";
 import { Box, Typography, Card, CardContent, Button, Divider } from "@mui/material";
 
+/**
+ * The ViolationList components displays the list of violations found in the audit.
+ * It displays the id, impact, and description of each violation in a list of custom cards.
+ * @param {*} Violations - The list of violations received from the audit.
+ * @returns The rendered ViolationsList component.
+ * 
+ * @see https://mui.com/material-ui/react-box/
+ * @see https://mui.com/material-ui/react-card/
+ * @see https://mui.com/material-ui/react-typography/
+ */
 const ViolationsList = ({ violations }) => {
   return (
     <Box>
-      <Typography variant="h4" component="div" sx={{ marginBottom: 2, fontWeight: 'bold', textAlign: 'center' }}>
+      <Typography variant="h4" sx={{ marginBottom: 2, fontWeight: 'bold', textAlign: 'center', pt: 1 }}>
         Violations List
       </Typography>
 
       {violations.length === 0 ? (
-        <Typography>No violations found.</Typography>
+        <Typography>No violations found!</Typography>
       ) : (
         violations.map((violation, index) => (
           <Card 
@@ -18,7 +28,8 @@ const ViolationsList = ({ violations }) => {
               marginBottom: 2,
               borderRadius: "16px",
               boxShadow: 3,
-              padding: 2,
+              px: 2,
+              pb: 2,
               transition: "transform 0.3s ease",
               "&:hover": {
                 transform: "scale(1.05)",
@@ -69,7 +80,6 @@ const ViolationsList = ({ violations }) => {
           </Card>
         ))
       )}
-
       <Divider sx={{ marginTop: 2 }} />
     </Box>
   );
