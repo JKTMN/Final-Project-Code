@@ -41,11 +41,7 @@ engine.post('/api/audit', async (req, res) => {
                 description: violation.description,
                 help: violation.help,
                 helpUrl: violation.helpUrl,
-                nodes: violation.nodes.map(node => ({
-                    html: node.html,
-                    message: node.any ? node.any.map(error => error.message).join(', ') : '',
-                    target: node.target
-                }))
+                tags: violation.tags,
             };
         });
 

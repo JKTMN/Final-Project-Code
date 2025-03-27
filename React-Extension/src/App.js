@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import theme from "./theme";
-import TopBar from "./components/TopBar";
-import MainContent from "./components/MainContent";
+import TopBar from "./components/Screens/TopBar";
 import { handleAxeApiCall } from "./functions/handleAxeApiCall";
-import ViolationModal from "./components/ViolationModal";
+import Page1Report from "./components/Screens/Page1Report";
+import Page2Metrics from "./components/Screens/Page2Metrics";
+import Page3Frameworks from "./components/Screens/Page3Frameworks";
 
 /**
  * @file This s the main entry point for the React app.
@@ -19,6 +20,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [newUrl, setUrl] = useState("");
+  const [activePage, setActivePage] = useState("page1")
 
   const handleApiCall = async (url) => {
     setLoading(true);
@@ -38,8 +40,14 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <TopBar onSubmit={handleApiCall} />
-      <MainContent violations={violations} testsRan={testsRan} loading={loading} error={error} url={newUrl}/>
+      <TopBar onSubmit={handleApiCall} setActivePage={setActivePage}/>
+      {activePage === "page1" ? (
+        <Page1Report violations={violations} testsRan={testsRan} loading={loading} error={error} url={newUrl} />
+      ) : activePage === "page2" ? (
+        <Page2Metrics />
+      ) : (
+        <Page3Frameworks />
+      )}
     </ThemeProvider>
   );
 }

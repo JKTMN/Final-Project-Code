@@ -20,15 +20,24 @@ const theme = createTheme({
     },
     text: {
       primary: "#23222F",
-      secondary: "#98989A",
+      secondary: "#5e5e5e",
+    },
+    active: {
+      main: "#21A0C0",
+    },
+    inactive: {
+      main: "#98989A",
     },
   },
   typography: {
     fontFamily: "Arial, sans-serif",
-    h1: { fontSize: "2rem", fontWeight: 700 },
-    h2: { fontSize: "1.75rem", fontWeight: 600 },
-    h3: { fontSize: "1.5rem", fontWeight: 500 },
-    body1: { fontSize: "1rem" },
+    h1: { fontSize: "24px", fontWeight: 700 },
+    h2: { fontSize: "22px", fontWeight: 600 },
+    h3: { fontSize: "20px", fontWeight: 500 },
+    h4: { fontSize: "18px", fontWeight: 400 },
+    h5: { fontSize: "16px", fontWeight: 300 },
+    h6: { fontSize: "14px", fontWeight: 200 },
+    body: { fontSize: "14px" },
   },
   components: {
     MuiButton: {

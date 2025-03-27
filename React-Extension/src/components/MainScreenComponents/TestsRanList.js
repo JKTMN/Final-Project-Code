@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Typography, Card, CardContent, Button, Divider } from "@mui/material";
+import TestsRanModal from "../SubComponents/TestsRanModal";
 
 /**
  * The TestsRanList component displays a list of tests that were ran in the audit.
@@ -12,14 +13,27 @@ import { Box, Typography, Card, CardContent, Button, Divider } from "@mui/materi
  * @see https://mui.com/material-ui/react-typography/
  */
 const TestsRanList = ({ testsRan }) => {
+  const [open, setOpen] = useState(false);
+  const [selectedTest, setSelectedTest] = useState(null);
+
+  const handleOpen = (test) => {
+    setSelectedTest(test);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedTest(null);
+  };
+
   return (
     <Box>
-      <Typography variant="h4" sx={{marginBottom: 2, fontWeight: 'bold', textAlign: 'center'}}>
+      <Typography variant="h3" sx={{marginBottom: 2, fontWeight: 'bold', textAlign: 'center'}}>
         Tests Ran
       </Typography>
 
         {testsRan.length === 0 ? (
-          <Typography>No tests ran!</Typography>
+          <Typography variant="h4" sx={{justifySelf: 'center', mt: 4}}>No tests ran!</Typography>
         ) : (
           testsRan.map((test) => (
             <Card
@@ -41,10 +55,10 @@ const TestsRanList = ({ testsRan }) => {
               }}
             >
               <CardContent>
-                <Typography variant="h6" sx={{ fontWeight: 600, color: "#23222F" }}>
+                <Typography variant="h5" sx={{ fontWeight: 600, color: "#23222F", mb: 0.5, textTransform: 'capitalize' }}>
                   {test.title}
                 </Typography>
-                <Typography variant="body2" sx={{ color: "#98989A" }}>
+                <Typography variant="body" >
                   {test.description}
                 </Typography>
               </CardContent>
@@ -59,7 +73,7 @@ const TestsRanList = ({ testsRan }) => {
                     "&:hover": { backgroundColor: "#1984a0" },
                     borderRadius: "8px",
                   }}
-                >
+                  onClick={() => handleOpen(test)}>
                   View Test
                 </Button>
               </Box>
@@ -67,6 +81,7 @@ const TestsRanList = ({ testsRan }) => {
           ))
         )}
       <Divider sx={{ marginTop: 2 }} />
+      <TestsRanModal open={open} handleClose={handleClose} test={selectedTest} />
     </Box>
   );
 };

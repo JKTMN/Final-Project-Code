@@ -1,8 +1,8 @@
 import React from "react";
 import { Box } from "@mui/material";
-import ViolationsList from "./ViolationsList";
-import TestsRanList from "./TestsRanList";
-import CenterSection from "./CenterSection";
+import ViolationsList from "../MainScreenComponents/ViolationsList";
+import TestsRanList from "../MainScreenComponents/TestsRanList";
+import CenterSection from "../MainScreenComponents/CenterSection";
 
 /**
  * This is the MainContent component that displays the main content of the app.
@@ -14,22 +14,26 @@ import CenterSection from "./CenterSection";
  * @returns The rendered MainContent component.
  * @see https://mui.com/material-ui/customization/how-to-customize/
  */
-const MainContent = ({ violations, testsRan, loading, error, url }) => {
+const Page1Report = ({ violations, testsRan, loading, error, url }) => {
   return (
     <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", height: "calc(100vh - 115px)", overflow: "hidden" }}>
-      <Box sx={{ width: "25%", px: 3, pt: 1.5, maxHeight: "100%", overflowY: "auto", direction: "rtl", "& > *": {direction: "ltr"} }}>
+      <Box sx={{ width: "30%", px: 3, pt: 1.5, maxHeight: "100%", overflowY: "auto", direction: "rtl", "& > *": {direction: "ltr"} }}>
         <ViolationsList violations={violations} />
       </Box>
 
-      <Box sx={{ width: "50%", padding: 2, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+      <Box sx={{ width: '1px', height: '100%', bgcolor: 'divider', mx: 0.5 }} />
+
+      <Box sx={{ width: "50%", px: 3, pt: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
         <CenterSection url={url}/>
       </Box>
+      
+      <Box sx={{ width: '1px', height: '100%', bgcolor: 'divider', mx: 0.5 }} />
 
-      <Box sx={{ width: "25%", px: 3, pt: 1.5, maxHeight: "100%", overflowY: "auto" }}>
+      <Box sx={{ width: "30%", px: 3, pt: 1.5, maxHeight: "100%", overflowY: "auto" }}>
         <TestsRanList testsRan={testsRan} />
       </Box>
     </Box>
   );
 };
 
-export default MainContent;
+export default Page1Report;

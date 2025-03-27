@@ -14,9 +14,7 @@ const WebIframe = ({url}) => {
         sx={{
             width: "100%",
             height: "100%",
-            border: "2px solid #23222F",
-            borderRadius: "16px",
-            padding: 2,
+            // padding: 2,
         }}
         >
             <iframe

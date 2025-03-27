@@ -38,7 +38,7 @@ const ViolationModal = ({ open, handleClose, violation }) => {
             justifyContent: 'center',
             alignItems: 'center',
             backgroundColor: '#f4f4f4',
-            height: '50px',
+            height: '100%',
             width: '45%',
             borderRadius: '8px',
             bgcolor: 'background.paper',
@@ -47,7 +47,8 @@ const ViolationModal = ({ open, handleClose, violation }) => {
           }}
         >
           {violation && violation.nodes && violation.nodes.length > 0 && violation.nodes[0].html ? (
-            <iframe srcdoc={violation.nodes[0].html} width="100%" height="100%" />
+            <iframe srcdoc={violation.htmlContent} width="100%" height="100%" />
+            // <Typography>{violation.nodes[0].html}</Typography>
           ) : (
             <Typography>No HTML content available for rendering.</Typography>
           )}
