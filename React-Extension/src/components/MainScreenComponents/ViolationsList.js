@@ -3,6 +3,7 @@ import { Box, Typography, Card, CardContent, Button, Divider } from "@mui/materi
 import ViolationModal from "../SubComponents/ViolationModal";
 import { removeHyphen } from "../../functions/utilityFunctions";
 import FilterSelect from "../SubComponents/FilterSelect";
+import HighlightSwitch from "../SubComponents/HighlightSwitch";
 
 /**
  * The ViolationList component displays the list of violations found in the audit.
@@ -17,7 +18,7 @@ import FilterSelect from "../SubComponents/FilterSelect";
  * @see https://mui.com/material-ui/react-card/
  * @see https://www.dhiwise.com/post/reactjs-filter-array-of-objects-effortless-data-handling
  */
-const ViolationsList = ({ violations }) => {
+const ViolationsList = ({ violations, setViolationHighlight }) => {
   const [open, setOpen] = useState(false);
   const [selectedViolation, setSelectedViolation] = useState(null);
   const [filteredViolations, setFilteredViolations] = useState(violations);
@@ -49,11 +50,14 @@ const ViolationsList = ({ violations }) => {
 
   return (
     <Box>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1, textAlign: "center" }}>
-        <Typography variant="h3" sx={{ marginBottom: 2, fontWeight: 'bold', textAlign: 'center', pt: 2, pl: 11 }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1, textAlign: "center", flexDirection: "column" }}>
+        <Typography variant="h3" sx={{ marginBottom: 1, fontWeight: 'bold', textAlign: 'center', pt: 2,}}>
           Violations List
         </Typography>
-        <FilterSelect filters={["all", ...filters]} setFilter={setFilter} />
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "row", gap: 2 }}>
+          <FilterSelect filters={["all", ...filters]} setFilter={setFilter} />
+          <HighlightSwitch setViolationHighlight={setViolationHighlight}/>
+        </Box>
       </Box>
 
       {filteredViolations.length === 0 ? (

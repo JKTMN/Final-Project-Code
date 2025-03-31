@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Box, FormControl, MenuItem, Select } from "@mui/material";
 
-
 /**
  * This component renders a select dropdwonn for filtering violations.
  * It takes an array of filters and a function to set the selected filter.
@@ -22,7 +21,7 @@ const FilterSelect = ({ filters, setFilter }) => {
   };
 
   return (
-    <Box sx={{ width: 150 }} size="small">
+    <Box sx={{ width: 140 }} size="small">
       <FormControl fullWidth>
         <Select
           labelId="filter-violations-select-label"

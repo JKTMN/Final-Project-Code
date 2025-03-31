@@ -42,6 +42,7 @@ engine.post('/api/audit', async (req, res) => {
                 help: violation.help,
                 helpUrl: violation.helpUrl,
                 tags: violation.tags,
+                pageUrl: violation.url,
             };
         });
 
@@ -52,7 +53,8 @@ engine.post('/api/audit', async (req, res) => {
         ].map(test => ({
             id: test.id,
             title: test.help,
-            description: test.description || "No description available"
+            description: test.description || "No description available",
+            tags: test.tags || [],
         }));
 
         // console.log('Violations Found: ', violations);

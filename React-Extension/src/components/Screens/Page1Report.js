@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 import ViolationsList from "../MainScreenComponents/ViolationsList";
 import TestsRanList from "../MainScreenComponents/TestsRanList";
@@ -15,10 +15,18 @@ import CenterSection from "../MainScreenComponents/CenterSection";
  * @see https://mui.com/material-ui/customization/how-to-customize/
  */
 const Page1Report = ({ violations, testsRan, loading, error, url }) => {
+  const [violationHightlight, setViolationHighlight] = useState(false);
+
+  useEffect(() => {
+    if (violationHightlight) {
+      alert("Highlighting violations is enabled. Click on the violation to see more details.");
+    }
+  }, [violationHightlight]);
+
   return (
     <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", height: "calc(100vh - 115px)", overflow: "hidden" }}>
       <Box sx={{ width: "30%", px: 3, pt: 1.5, maxHeight: "100%", overflowY: "auto", direction: "rtl", "& > *": {direction: "ltr"} }}>
-        <ViolationsList violations={violations} />
+        <ViolationsList violations={violations} setViolationHighlight={setViolationHighlight} />
       </Box>
 
       <Box sx={{ width: '1px', height: '100%', bgcolor: 'divider', mx: 0.5 }} />
