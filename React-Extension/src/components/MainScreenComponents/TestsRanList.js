@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Card, CardContent, Button, Divider } from "@mui/material";
 import TestsRanModal from "../SubComponents/TestsRanModal";
+import FilterSelect from "../SubComponents/FilterSelect";
 
 /**
  * The TestsRanList component displays a list of tests that were ran in the audit.
@@ -15,6 +16,9 @@ import TestsRanModal from "../SubComponents/TestsRanModal";
 const TestsRanList = ({ testsRan }) => {
   const [open, setOpen] = useState(false);
   const [selectedTest, setSelectedTest] = useState(null);
+  const [filter, setFilter] = useState("all");
+  const [filteredList, setFilteredList] = useState(testsRan);
+  const [filters, setFilters] = useState([]);
 
   const handleOpen = (test) => {
     setSelectedTest(test);
@@ -26,16 +30,39 @@ const TestsRanList = ({ testsRan }) => {
     setSelectedTest(null);
   };
 
+  useEffect(() => {
+    const uniqueTags = [...new Set(testsRan.flatMap(test => test.tags))];
+    setFilters(uniqueTags);
+  }, [testsRan]);
+
+  useEffect(() => {
+    if (filter === "all") {
+      setFilteredList(testsRan);
+    } else {
+      setFilteredList(testsRan.filter(test => test.tags.includes(filter)));
+    }
+  }, [filter, testsRan]);
+
+
   return (
     <Box>
-      <Typography variant="h3" sx={{marginBottom: 2, fontWeight: 'bold', textAlign: 'center'}}>
-        Tests Ran
-      </Typography>
+      <Box sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}>
+        <Box sx={{ flexGrow: 1 }}> 
+          <FilterSelect filters={["all", ...filters]} setFilter={setFilter} />
+        </Box>
 
-        {testsRan.length === 0 ? (
+        <Typography 
+          variant="h3" 
+          sx={{ fontWeight: 'bold', textAlign: 'center', flexGrow: 2 }}
+        >
+          Tests Ran
+        </Typography>
+      </Box>
+
+        {filteredList.length === 0 ? (
           <Typography variant="h4" sx={{justifySelf: 'center', mt: 4}}>No tests ran!</Typography>
         ) : (
-          testsRan.map((test) => (
+          filteredList.map((test) => (
             <Card
               key={test.id}
               sx={{

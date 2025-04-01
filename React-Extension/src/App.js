@@ -15,7 +15,10 @@ import Page3Frameworks from "./components/Screens/Page3Frameworks";
  * @see https://react.dev/reference/react/useState
  */
 function App() {
+  const [passes, setPasses] = useState([]);
   const [violations, setViolations] = useState([]);
+  const [incomplete, setIncomplete] = useState([]);
+  const [inapplicable, setInapplicable] = useState([]);
   const [testsRan, setTestsRan] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -27,8 +30,11 @@ function App() {
     setError(null);
     setUrl(url);
     try {
-      const { violations, testsRan } = await handleAxeApiCall(url, setLoading, setError);
+      const { passes, violations, incomplete, inapplicable, testsRan } = await handleAxeApiCall(url, setLoading, setError);
+      setPasses(passes);
       setViolations(violations);
+      setIncomplete(incomplete);
+      setInapplicable(inapplicable);
       setTestsRan(testsRan);
     } catch (err) {
       setError("Error fetching the violations");
@@ -42,7 +48,7 @@ function App() {
       <CssBaseline />
       <TopBar onSubmit={handleApiCall} setActivePage={setActivePage}/>
       {activePage === "page1" ? (
-        <Page1Report violations={violations} testsRan={testsRan} loading={loading} error={error} url={newUrl} />
+        <Page1Report passes={passes} violations={violations} incomplete={incomplete} inapplicable={inapplicable} testsRan={testsRan} loading={loading} error={error} url={newUrl} />
       ) : activePage === "page2" ? (
         <Page2Metrics />
       ) : (

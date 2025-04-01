@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Card, CardContent, Button, Divider } from "@mui/material";
-import ViolationModal from "../SubComponents/ViolationModal";
+import ResultsModal from "../SubComponents/ResultsModal";
 import { removeHyphen } from "../../functions/utilityFunctions";
 import FilterSelect from "../SubComponents/FilterSelect";
 import HighlightSwitch from "../SubComponents/HighlightSwitch";
@@ -18,52 +18,56 @@ import HighlightSwitch from "../SubComponents/HighlightSwitch";
  * @see https://mui.com/material-ui/react-card/
  * @see https://www.dhiwise.com/post/reactjs-filter-array-of-objects-effortless-data-handling
  */
-const ViolationsList = ({ violations, setViolationHighlight }) => {
+const ResultsList = ({ listData, setViolationHighlight, selectedValue }) => {
   const [open, setOpen] = useState(false);
-  const [selectedViolation, setSelectedViolation] = useState(null);
-  const [filteredViolations, setFilteredViolations] = useState(violations);
+  const [selectedListItem, setSelectedListItem] = useState(null);
+  const [filteredList, setFilteredList] = useState(listData);
   const [filters, setFilters] = useState([]);
   const [filter, setFilter] = useState("all");
 
-  const handleOpen = (violation) => {
-    setSelectedViolation(violation);  
+  const handleOpen = (listItem) => {
+    setSelectedListItem(listItem);  
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
-    setSelectedViolation(null);
+    setSelectedListItem(null);
   };
 
   useEffect(() => {
-    const uniqueTags = [...new Set(violations.flatMap(violation => violation.tags))];
+    const uniqueTags = [...new Set(listData.flatMap(listItem => listItem.tags))];
     setFilters(uniqueTags);
-  }, [violations]);
+  }, [listData]);
 
   useEffect(() => {
     if (filter === "all") {
-      setFilteredViolations(violations);
+      setFilteredList(listData);
     } else {
-      setFilteredViolations(violations.filter(violation => violation.tags.includes(filter)));
+      setFilteredList(listData.filter(listItem => listItem.tags.includes(filter)));
     }
-  }, [filter, violations]);
+  }, [filter, listData, selectedValue]);
 
   return (
     <Box>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1, textAlign: "center", flexDirection: "column" }}>
-        <Typography variant="h3" sx={{ marginBottom: 1, fontWeight: 'bold', textAlign: 'center', pt: 2,}}>
-          Violations List
-        </Typography>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", textAlign: "center", flexDirection: "column" }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "row", gap: 2 }}>
-          <FilterSelect filters={["all", ...filters]} setFilter={setFilter} />
-          <HighlightSwitch setViolationHighlight={setViolationHighlight}/>
+          <FilterSelect filters={["all", ...filters]} setFilter={setFilter}/>
+          <HighlightSwitch setViolationHighlight={setViolationHighlight} selectedValue={selectedValue}/>
         </Box>
       </Box>
 
-      {filteredViolations.length === 0 ? (
-        <Typography variant="h4" sx={{ justifySelf: 'center', mt: 4 }}>No violations found!</Typography>
-      ) : (
-        filteredViolations.map((violation, index) => (
+      {filteredList.length === 0 ? (
+      <Typography variant="h4" sx={{ justifySelf: 'center', mt: 1 }}>
+        No {selectedValue} found!
+      </Typography>
+    ) : (
+      <>
+        <Typography variant="h4" sx={{ justifySelf: 'center', mt: 2, mb: 2 }}>
+          <strong>{filteredList.length}</strong> {selectedValue} found!
+        </Typography>
+        
+        {filteredList.map((listItem, index) => (
           <Card 
             key={index} 
             sx={{
@@ -90,21 +94,22 @@ const ViolationsList = ({ violations, setViolationHighlight }) => {
               }}
             >
               <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: 1, textTransform: "capitalize", textDecoration: "underline" }}>
-                {removeHyphen(violation.id)}
+                {removeHyphen(listItem.id)}
               </Typography>
 
-              <Typography variant="body" color="text.secondary" sx={{ marginBottom: 1 }}>
+              <Typography variant="body1" color="text.secondary" sx={{ marginBottom: 1 }}>
                 <strong>Impact:</strong>
-                <Typography variant="body" sx={{ color: 
-                  violation.impact === "minor" ? "green" :
-                  violation.impact === "moderate" ? "orange" :
-                  violation.impact === "serious" ? "red" :
-                  violation.impact === "critical" ? "darkred" : "black", textTransform: "capitalize"
-                }}> {violation.impact}</Typography>
+                <Typography variant="body1" sx={{ color: 
+                  listItem.impact === "N/A" ? "green" :
+                  listItem.impact === "minor" ? "green" :
+                  listItem.impact === "moderate" ? "orange" :
+                  listItem.impact === "serious" ? "red" :
+                  listItem.impact === "critical" ? "darkred" : "black", textTransform: "capitalize"
+                }}> {listItem.impact}</Typography>
               </Typography>
 
               <Typography variant="body2" sx={{ marginBottom: 2 }}>
-                <strong>Description:</strong> {violation.description}
+                <strong>Description:</strong> {listItem.description}
               </Typography>
             </CardContent>
 
@@ -118,18 +123,19 @@ const ViolationsList = ({ violations, setViolationHighlight }) => {
                   "&:hover": { backgroundColor: "#1984a0" },
                   borderRadius: "8px", 
                 }}
-                onClick={() => handleOpen(violation)}
+                onClick={() => handleOpen(listItem)}
               >
                 Fix This Violation
               </Button>
             </Box>
           </Card>
-        ))
-      )}
+        ))}
+      </>
+    )}
       <Divider sx={{ marginTop: 2 }} />
-      <ViolationModal open={open} handleClose={handleClose} violation={selectedViolation} />
+      <ResultsModal open={open} handleClose={handleClose} listItem={selectedListItem} />
     </Box>
   );
 };
 
-export default ViolationsList;
+export default ResultsList;

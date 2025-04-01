@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, FormControl, MenuItem, Select } from "@mui/material";
 
 /**
@@ -21,8 +21,8 @@ const FilterSelect = ({ filters, setFilter }) => {
   };
 
   return (
-    <Box sx={{ width: 140 }} size="small">
-      <FormControl fullWidth>
+    <Box sx={{ width: 135 }} size="small">
+      <FormControl fullWidth size="small">
         <Select
           labelId="filter-violations-select-label"
           id="filter-violations-select"

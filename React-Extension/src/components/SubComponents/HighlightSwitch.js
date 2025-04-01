@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Switch, FormControlLabel, FormGroup } from '@mui/material';
+import InformationButton from '../small components/InformationButton';
 
 
 /**
@@ -13,7 +14,7 @@ import { Switch, FormControlLabel, FormGroup } from '@mui/material';
  * @see https://mui.com/material-ui/api/form-group/
  * @see https://mui.com/material-ui/api/form-label/
  */
-const HighlightSwitch = ({ setViolationHighlight }) => {
+const HighlightSwitch = ({ setViolationHighlight, selectedValue }) => {
     const [checked, setChecked] = useState(true);
 
     const handleChange = (event) => {
@@ -22,9 +23,12 @@ const HighlightSwitch = ({ setViolationHighlight }) => {
     };
 
     return (
-        <FormGroup sx={{ display: 'flex', alignItems: 'center', ml: 2, flexDirection: 'column', gap: 1 }}>
+        <FormGroup sx={{ display: 'flex', alignItems: 'center', flexDirection: 'row', gap: 1, pt: 2 }}>
             <FormControlLabel 
-            control={<Switch defaultChecked />} label="Highlight Violations"
+            control={<Switch defaultChecked />} 
+            label={<span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            Highlight {selectedValue} <InformationButton item={`Highlighting ${selectedValue}`}/>
+            </span>}
             labelPlacement="top"
             onChange={handleChange}
             />

@@ -16,7 +16,13 @@ export const handleAxeApiCall = async (url, setLoading, setError) => {
 
     try {
       const response = await axios.post("http://localhost:3001/api/audit", { url });
-      return {violations: response.data.violations, testsRan: response.data.testsRun};
+      return {
+        passes: response.data.passes,
+        violations: response.data.violations, 
+        incomplete: response.data.incomplete,
+        inapplicable: response.data.inapplicable,
+        testsRan: response.data.testsRun
+      };
     } catch (err) {
       setError("Error fetching the violations");
     } finally {

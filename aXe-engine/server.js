@@ -19,6 +19,40 @@ engine.use(cors({
 
 engine.use(express.json());
 
+const runAccessibilityAudit = async (url) => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(url);
+
+    const results = await new AxePuppeteer(page).analyze();
+
+    const formatResults = (items) => items.map(item => ({
+        id: item.id,
+        impact: item.impact || 'N/A',
+        description: item.description || 'No description available',
+        help: item.help,
+        helpUrl: item.helpUrl,
+        tags: item.tags || [],
+        pageUrl: url
+    }));
+
+    await browser.close();
+
+    return {
+        url,
+        passes: formatResults(results.passes || []),
+        violations: formatResults(results.violations || []),
+        incomplete: formatResults(results.incomplete || []),
+        inapplicable: formatResults(results.inapplicable || []),
+        testsRun: [...results.passes, ...results.violations, ...results.inapplicable, ...results.incomplete].map(test => ({
+            id: test.id,
+            title: test.help,
+            description: test.description || 'No description available',
+            tags: test.tags || []
+        }))
+    };
+};
+
 engine.post('/api/audit', async (req, res) => {
     const { url } = req.body;
 
@@ -27,47 +61,14 @@ engine.post('/api/audit', async (req, res) => {
     }
 
     try {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.goto(url);
-
-        const results = await new AxePuppeteer(page).analyze();
-        console.log(JSON.stringify(results, null, 2));
-
-        const violations = (results.violations || []).map(violation => {
-            return {
-                id: violation.id,
-                impact: violation.impact,
-                description: violation.description,
-                help: violation.help,
-                helpUrl: violation.helpUrl,
-                tags: violation.tags,
-                pageUrl: violation.url,
-            };
-        });
-
-        const testsRun = [
-            ...results.passes,
-            ...results.violations,
-            ...results.inapplicable
-        ].map(test => ({
-            id: test.id,
-            title: test.help,
-            description: test.description || "No description available",
-            tags: test.tags || [],
-        }));
-
-        // console.log('Violations Found: ', violations);
-        // console.log('Tests Ran: ', testsRun);
-
-        await browser.close();
-
-        res.json({ violations, testsRun });
+        const auditResults = await runAccessibilityAudit(url);
+        res.json(auditResults);
     } catch (error) {
         console.error('Error running accessibility audit:', error);
         res.status(500).json({ error: 'Failed to run accessibility audit' });
     }
 });
+
 
 engine.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

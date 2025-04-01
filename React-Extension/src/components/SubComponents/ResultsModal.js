@@ -11,7 +11,7 @@ import { Modal, Box, Typography, Button } from '@mui/material';
  * 
  * @see https://mui.com/material-ui/react-modal/
  */
-const ViolationModal = ({ open, handleClose, violation }) => {
+const ResultsModal = ({ open, handleClose, listItem }) => {
   return (
     <Modal open={open} onClose={handleClose}>
       <Box
@@ -46,8 +46,8 @@ const ViolationModal = ({ open, handleClose, violation }) => {
             boxShadow: 2,
           }}
         >
-          {violation && violation.nodes && violation.nodes.length > 0 && violation.nodes[0].html ? (
-            <iframe srcdoc={violation.htmlContent} width="100%" height="100%" />
+          {listItem && listItem.nodes && listItem.nodes.length > 0 && listItem.nodes[0].html ? (
+            <iframe srcdoc={listItem.htmlContent} width="100%" height="100%" />
             // <Typography>{violation.nodes[0].html}</Typography>
           ) : (
             <Typography>No HTML content available for rendering.</Typography>
@@ -68,22 +68,22 @@ const ViolationModal = ({ open, handleClose, violation }) => {
             gap: 2,
           }}
         >
-          {violation && (
+          {listItem && (
             <>
               <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold' }}>
-                Found Violation: {violation.id}
+                Found Violation: {listItem.id} 
               </Typography>
 
               <Typography sx={{ mt: 1 }}>
-                <strong>Impact:</strong> {violation.impact}
+                <strong>Impact:</strong> {listItem.impact}
               </Typography>
 
               <Typography sx={{ mt: 1 }}>
-                <strong>Description:</strong> {violation.description}
+                <strong>Description:</strong> {listItem.description}
               </Typography>
 
               <Typography sx={{ mt: 1 }}>
-                <strong>Help:</strong> {violation.help}
+                <strong>Help:</strong> {listItem.help}
               </Typography>
 
               <Box sx={{ mt: 3, display: 'flex', justifyContent: 'space-between', justifyItems: 'center', width: '100%' }}>
@@ -123,4 +123,4 @@ const ViolationModal = ({ open, handleClose, violation }) => {
   );
 };
 
-export default ViolationModal;
+export default ResultsModal;
