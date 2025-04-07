@@ -7,6 +7,7 @@
  * @see https://stackoverflow.com/questions/6204867/fastest-way-to-remove-hyphens-from-a-string
  */
 export const removeHyphen = (str) => {
+    if (typeof str !== 'string') return str;
     return str.replace(/-/g, " ");
 };
 

@@ -6,14 +6,15 @@ import FilterSelect from "../SubComponents/FilterSelect";
 import HighlightSwitch from "../SubComponents/HighlightSwitch";
 
 /**
- * The ViolationList component displays the list of violations found in the audit.
- * It displays the id, impact, and description of each violation in a list of custom cards.
- * The user can filter the violations based on their tags.
- * Each card has a button that opens a modal with more details about the violation.
+ * The ResultsList component displays the list different lists of violations, passes etc found in the audit.
+ * It displays the id, impact, and description of each results in a list of custom cards.
+ * The user can filter the results based on their tags.
+ * Each card has a button that opens a modal with more details about the results.
  * 
- * @param {Object} Violations - The violations found in the audit.
+ * @param {Object} listData - The Results found in the audit.
+ * @param {String} selectedValue - The selected value for the result type.
  * 
- * @returns {JSX.Element} - The ViolationList component.
+ * @returns {JSX.Element} - The ResultsList component.
  * 
  * @see https://mui.com/material-ui/react-card/
  * @see https://www.dhiwise.com/post/reactjs-filter-array-of-objects-effortless-data-handling
@@ -52,7 +53,7 @@ const ResultsList = ({ listData, setViolationHighlight, selectedValue }) => {
     <Box>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", textAlign: "center", flexDirection: "column" }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: "row", gap: 2 }}>
-          <FilterSelect filters={["all", ...filters]} setFilter={setFilter}/>
+          <FilterSelect filters={["all", ...filters]} setFilter={setFilter} width={135}/>
           <HighlightSwitch setViolationHighlight={setViolationHighlight} selectedValue={selectedValue}/>
         </Box>
       </Box>
@@ -125,7 +126,7 @@ const ResultsList = ({ listData, setViolationHighlight, selectedValue }) => {
                 }}
                 onClick={() => handleOpen(listItem)}
               >
-                Fix This Violation
+                View More Details
               </Button>
             </Box>
           </Card>

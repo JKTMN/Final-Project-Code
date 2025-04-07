@@ -3,6 +3,10 @@ import React from "react";
 import Page2LeftSection from '../MainScreenComponents/Page2LeftSection';
 import CenterSection from '../MainScreenComponents/CenterSection';
 
+/**
+ * The Page2Metrics Screen component.
+ * @returns 
+ */
 const Page2Metrics = () => {
 
     return (

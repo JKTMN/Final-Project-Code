@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Switch, FormControlLabel, FormGroup } from '@mui/material';
 import InformationButton from '../small components/InformationButton';
 
-
 /**
  * A switch component used for enabling/disabling the highlight of violations within the iframe
  * rendering the webpage.
@@ -27,7 +26,7 @@ const HighlightSwitch = ({ setViolationHighlight, selectedValue }) => {
             <FormControlLabel 
             control={<Switch defaultChecked />} 
             label={<span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-            Highlight {selectedValue} <InformationButton item={`Highlighting ${selectedValue}`}/>
+            Highlight {selectedValue} <InformationButton toolTip={`Find out more about Highlighting Violations`}/>
             </span>}
             labelPlacement="top"
             onChange={handleChange}

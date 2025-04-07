@@ -1,6 +1,10 @@
 import { Typography, Box } from "@mui/material";
 import React from "react";
 
+/**
+ * The Page3Frameworks Screen component.
+ * @returns 
+ */
 const Page3Frameworks = () => {
 
     return (

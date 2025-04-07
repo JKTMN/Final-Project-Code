@@ -4,15 +4,18 @@ import ResultsList from "../MainScreenComponents/ResultsList";
 import TestsRanList from "../MainScreenComponents/TestsRanList";
 import CenterSection from "../MainScreenComponents/CenterSection";
 import InformationButton from "../small components/InformationButton";
-import PageSelect from "../small components/PageSelect";
+import PageSelect from "../SubComponents/PageSelect";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 /**
  * This is the MainContent component that displays the main content of the app.
  * It contains the ViolationsList, CenterSection, and TestsRanList components.
- * @param {*} violations The list of violations found.
- * @param {*} testsRan The list of tests ran. 
- * @param {*} URL The URL of the audited page. 
+ * @param {Object} Passes The list of passes found.
+ * @param {Object} violations The list of violations found.
+ * @param {Object} incomplete The list of incomplete tests.
+ * @param {Object} inapplicable The list of inapplicable tests.
+ * @param {Object} testsRan The list of tests ran. 
+ * @param {String} URL The URL of the audited page. 
  * 
  * @returns The rendered MainContent component.
  * @see https://mui.com/material-ui/customization/how-to-customize/

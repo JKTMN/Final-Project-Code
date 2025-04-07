@@ -24,9 +24,6 @@ const TopBar = ({ onSubmit, setActivePage }) => {
     <AppBar position="static" sx={{ backgroundColor: "#23222F", padding: 2 }}>
       <Toolbar sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         
-        {/* <Typography variant="h2" sx={{ color: "white" }}>
-          Test
-        </Typography> */}
         <NavSwitch setActivePage={setActivePage}/>
 
         <Typography
@@ -63,6 +60,5 @@ const TopBar = ({ onSubmit, setActivePage }) => {
     </AppBar>
   );
 };
-
 
 export default TopBar;

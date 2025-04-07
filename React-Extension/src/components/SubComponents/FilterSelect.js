@@ -11,7 +11,7 @@ import { Box, FormControl, MenuItem, Select } from "@mui/material";
  * 
  * @see https://mui.com/material-ui/react-select/
  */
-const FilterSelect = ({ filters, setFilter }) => {
+const FilterSelect = ({ filters, setFilter, width }) => {
   const [selectedValue, setSelectedValue] = useState("all");
 
   const handleChange = (event) => {
@@ -21,7 +21,7 @@ const FilterSelect = ({ filters, setFilter }) => {
   };
 
   return (
-    <Box sx={{ width: 135 }} size="small">
+    <Box sx={{ width: {width} }} size="small">
       <FormControl fullWidth size="small">
         <Select
           labelId="filter-violations-select-label"

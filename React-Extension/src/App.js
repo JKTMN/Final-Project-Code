@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { ThemeProvider, CssBaseline, Typography, Box } from "@mui/material";
 import theme from "./theme";
 import TopBar from "./components/Screens/TopBar";
 import { handleAxeApiCall } from "./functions/handleAxeApiCall";
 import Page1Report from "./components/Screens/Page1Report";
 import Page2Metrics from "./components/Screens/Page2Metrics";
 import Page3Frameworks from "./components/Screens/Page3Frameworks";
+import LoadingScreen from "./components/Screens/LoadingScreen";
 
 /**
  * @file This s the main entry point for the React app.
@@ -23,19 +24,22 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [newUrl, setUrl] = useState("");
-  const [activePage, setActivePage] = useState("page1")
+  const [activePage, setActivePage] = useState("page1");
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   const handleApiCall = async (url) => {
     setLoading(true);
     setError(null);
     setUrl(url);
     try {
+      setDataLoaded(false);
       const { passes, violations, incomplete, inapplicable, testsRan } = await handleAxeApiCall(url, setLoading, setError);
       setPasses(passes);
       setViolations(violations);
       setIncomplete(incomplete);
       setInapplicable(inapplicable);
       setTestsRan(testsRan);
+      setDataLoaded(true);
     } catch (err) {
       setError("Error fetching the violations");
     } finally {
@@ -43,17 +47,26 @@ function App() {
     }
   };
 
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <TopBar onSubmit={handleApiCall} setActivePage={setActivePage}/>
-      {activePage === "page1" ? (
-        <Page1Report passes={passes} violations={violations} incomplete={incomplete} inapplicable={inapplicable} testsRan={testsRan} loading={loading} error={error} url={newUrl} />
-      ) : activePage === "page2" ? (
-        <Page2Metrics />
-      ) : (
-        <Page3Frameworks />
-      )}
+      <TopBar onSubmit={handleApiCall} setActivePage={setActivePage} />
+      {!dataLoaded && !loading ? (
+        <Box sx={{justifyContent: "center", alignItems: "center", height: "calc(100vh - 115px)", display: "flex", flexDirection: "column"}}>
+          <Typography variant="h6" sx={{ textAlign: "center", mt: 2 }}>
+            Enter a URL to get started
+          </Typography>
+        </Box>
+      ) : loading ? (
+        <LoadingScreen />
+      ) : dataLoaded && activePage === "page1" ? (
+          <Page1Report passes={passes} violations={violations} incomplete={incomplete} inapplicable={inapplicable} testsRan={testsRan} loading={loading} error={error} url={newUrl} />
+        ) : activePage === "page2" ? (
+          <Page2Metrics />
+        ) : (
+          <Page3Frameworks />
+        )}
     </ThemeProvider>
   );
 }

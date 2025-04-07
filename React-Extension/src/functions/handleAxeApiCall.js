@@ -13,7 +13,6 @@ import axios from "axios";
 export const handleAxeApiCall = async (url, setLoading, setError) => {
     setLoading(true);
     setError(null);
-
     try {
       const response = await axios.post("http://localhost:3001/api/audit", { url });
       return {

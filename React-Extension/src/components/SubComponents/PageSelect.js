@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Box, FormControl, MenuItem, Select } from "@mui/material";
 
 /**
+ * PageSelect component allows the user to select a page from a dropdown menu.
+ * It updates the selected page and calls the setRenderedUrl function to update the displayed page.
+ * 
  * @param {object} Filters - The filters to be displayed in the select dropdown.
  * @param {function} setFilter - The function to set the selected filter. 
  * @returns The rendered FilterSelect component.

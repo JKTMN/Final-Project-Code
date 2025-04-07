@@ -38,6 +38,7 @@ const TestsRanList = ({ testsRan }) => {
   useEffect(() => {
     if (filter === "all") {
       setFilteredList(testsRan);
+      console.log("Tests ran:", testsRan);
     } else {
       setFilteredList(testsRan.filter(test => test.tags.includes(filter)));
     }
@@ -46,14 +47,14 @@ const TestsRanList = ({ testsRan }) => {
 
   return (
     <Box>
-      <Box sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}>
+      <Box sx={{ display: "flex", alignItems: "center", marginBottom: 2, textAlign: "center"}}>
         <Box sx={{ flexGrow: 1 }}> 
-          <FilterSelect filters={["all", ...filters]} setFilter={setFilter} />
+          <FilterSelect filters={["all", ...filters]} setFilter={setFilter} width={100}/>
         </Box>
 
         <Typography 
           variant="h3" 
-          sx={{ fontWeight: 'bold', textAlign: 'center', flexGrow: 2 }}
+          sx={{ fontWeight: 'bold', textAlign: 'center', flexGrow: 2, mr: 16 }}
         >
           Tests Ran
         </Typography>
