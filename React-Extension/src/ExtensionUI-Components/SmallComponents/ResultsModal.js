@@ -82,7 +82,7 @@ const ResultsModal = ({ open, handleClose, listItem }) => {
         <Divider />
 
         <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-            <InformationButton />
+            <InformationButton onClick={null} toolTip="Click the link below to find out more!" />
             
             {resources && resources.length > 0 && (
                 <Typography variant="h6" sx={{ textAlign: 'center' }}>

@@ -26,9 +26,9 @@ const DashboardRight = ({ url, chosenList, auditResults }) => {
       flexDirection: "column",
       px: isMobile ? 1 : 2
     }}>
-      <Box sx={{mb: 2,}}>
+      {/* <Box sx={{mb: 2,}}>
         <HighlightSwitch setViolationHighlight={setViolationHighlight} selectedValue={chosenList}/>
-      </Box>
+      </Box> */}
 
       <Box sx={{
         flex: 1,

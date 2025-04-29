@@ -51,6 +51,7 @@ const MainUI = () => {
         setAuditResults(auditResponse);
       } catch (error) {
         console.error('Error during API call:', error);
+        alert('An error occurred while fetching the audit results. Please try again. Or check the URL.');
       } finally {
         setLoading(false);
       }

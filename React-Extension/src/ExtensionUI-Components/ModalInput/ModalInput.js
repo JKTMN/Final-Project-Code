@@ -14,6 +14,17 @@ const modalStyle = {
   p: 3,
   zIndex: 9999
 };
+
+const validURL = (str) => {
+  var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+  return !!pattern.test(str);
+};
+
 /**
  * ModalOverlay Component
  * 
@@ -26,7 +37,7 @@ const modalStyle = {
  * 
  * @see https://developer.chrome.com/docs/extensions/reference/api/tabs
  * @see https://developer.chrome.com/docs/extensions/reference/api/storage
- * 
+ * @see https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
  */
 const ModalOverlay = ({ open, onClose }) => {
   const [url, setUrl] = useState('');
@@ -42,16 +53,20 @@ const ModalOverlay = ({ open, onClose }) => {
   };
 
   const handleManualSubmit = () => {
-    const finalUrl = url || '';
-    if (finalUrl) {
-      storeAndOpen(finalUrl);
+    const finalUrl = url.trim();
+    if (!finalUrl || !validURL(finalUrl)) {
+      alert('Please enter a valid URL (including http:// or https:// with a proper domain).');
+      return;
     }
+    storeAndOpen(finalUrl);
   };
 
   const handleUseCurrentUrl = () => {
     getCurrentTabUrl((currentUrl) => {
-      if (currentUrl) {
+      if (currentUrl && validURL(currentUrl)) {
         storeAndOpen(currentUrl);
+      } else {
+        alert('Current tab URL is invalid or unavailable.');
       }
     });
   };
