@@ -24,7 +24,7 @@ const Dashboard = () => {
   const { auditResults, loading, setLoading} = useOutletContext();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [chosenList, setChosenList] = useState('Passes');
+  const [chosenList, setChosenList] = useState('passes');
 
   useEffect(() => {
     if (chrome?.storage?.local) {
@@ -56,7 +56,7 @@ const Dashboard = () => {
           display: 'flex',
           pt: isMobile ? 1 : 0
         }}>
-        <DashboardRight url={storedUrl} chosenList={chosenList}/>
+        <DashboardRight url={storedUrl} chosenList={chosenList} auditResults={auditResults}/>
       </Grid>
     </Grid>
   );

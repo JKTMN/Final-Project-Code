@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, useTheme, useMediaQuery, Typography } from "@mui/material";
 import WebIframe from "../SmallComponents/WebIframe";
 import HighlightSwitch from "../SmallComponents/HighlightSwitch";
@@ -13,10 +13,10 @@ import HighlightSwitch from "../SmallComponents/HighlightSwitch";
  * @param {String} chosenList - The selected list of violations to be highlighted. 
  * @returns The rendered DashboardRight component.
  */
-const DashboardRight = ({ url, chosenList }) => {
+const DashboardRight = ({ url, chosenList, auditResults }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [violationHightlght, setViolationHighlight] = useState(false); //default to true 
+  const [violationHightlght, setViolationHighlight] = useState(false); //default to true
 
   return (
     <Box sx={{ 

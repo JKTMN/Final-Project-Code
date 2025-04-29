@@ -19,12 +19,14 @@
   
       document.body.appendChild(iframe);
   
+      // Add a listener to handle close messages from the iframe
       window.addEventListener("message", (event) => {
         if (event.data === "close-modal") {
           iframe.style.display = "none";
         }
       });
     } else {
+      // If it already exists, toggle it back on if hidden
       iframe.style.display = "block";
     }
   })();

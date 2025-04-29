@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, Card, CardContent, Button, Divider, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { removeHyphen } from "../../functions/utilityFunctions";
+import ResultsModal from "./ResultsModal";
 
 /**
  * ResultsList Component
@@ -20,6 +21,19 @@ const ResultsList = ({ title, listData, chosenList, filter }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [filteredList, setFilteredList] = useState(listData);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [open, setOpen] = useState(false);
+  
+
+  const handleOpen = (item) => {
+    setSelectedItem(item);
+    setOpen(true);
+  };
+  
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedItem(null);
+  };
 
   useEffect(() => {
     if (filter === "all" || !filter) {
@@ -149,27 +163,31 @@ const ResultsList = ({ title, listData, chosenList, filter }) => {
               </CardContent>
 
               <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <Button
-                  variant="contained"
-                  size={isMobile ? "small" : "medium"}
-                  sx={{
-                    backgroundColor: theme.palette.primary.main,
-                    color: theme.palette.common.white,
-                    width: "80%",
-                    "&:hover": { 
-                      backgroundColor: theme.palette.primary.dark 
-                    },
-                    borderRadius: theme.shape.borderRadius,
-                    py: isMobile ? 0.5 : 1,
-                  }}
-                >
-                  View More
-                </Button>
+              <Button
+                variant="contained"
+                size={isMobile ? "small" : "medium"}
+                sx={{
+                  backgroundColor: theme.palette.primary.main,
+                  color: theme.palette.common.white,
+                  width: "80%",
+                  "&:hover": { 
+                    backgroundColor: theme.palette.primary.dark 
+                  },
+                  borderRadius: theme.shape.borderRadius,
+                  py: isMobile ? 0.5 : 1,
+                }}
+                onClick={() => handleOpen(item)}
+              >
+                View More
+              </Button>
               </Box>
             </Card>
           ))
         )}
       </Box>
+      {selectedItem && (
+        <ResultsModal open={open} handleClose={handleClose} listItem={selectedItem} />
+      )}
     </Box>
   );
 };
