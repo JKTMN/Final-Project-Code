@@ -12,5 +12,5 @@ export const removeHyphen = (str) => {
 };
 
 export const removeScheme = (str) => {
-    return str.replace(/(^\w+:|^)\/\/|www\./g, '');
+    return str.replace(/(^\w+:|^)\/\/|www\./g, '').replace(/\/+$/g, '');
 };

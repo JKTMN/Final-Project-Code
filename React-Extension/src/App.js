@@ -1,74 +1,37 @@
-import React, { useEffect, useState } from "react";
-import { ThemeProvider, CssBaseline, Typography, Box } from "@mui/material";
-import theme from "./theme";
-import TopBar from "./components/Screens/TopBar";
-import { handleAxeApiCall } from "./functions/handleAxeApiCall";
-import Page1Report from "./components/Screens/Page1Report";
-import Page2Metrics from "./components/Screens/Page2Metrics";
-import Page3Frameworks from "./components/Screens/Page3Frameworks";
-import LoadingScreen from "./components/Screens/LoadingScreen";
+import React, { useState } from 'react';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
+import ModalInput from './ExtensionUI-Components/ModalInput/ModalInput';
+import MainUI from './ExtensionUI-Components/MainUI/MainUI';
+import Dashboard from './ExtensionUI-Components/Pages/Dashboard';
+import Analytics from './ExtensionUI-Components/Pages/Analytics';
+import Settings from './ExtensionUI-Components/Pages/Settings';
 
 /**
- * @file This s the main entry point for the React app.
- * It contains the root component and handles the app structure, routing, and rendering.
+ * App Component
  * 
- * @returns The rendered React app.
- * @see https://react.dev/reference/react/useState
+ * The root component of the applications.
+ * Sets up client-side routing using React-Router-Dom.
+ * 
+ * @returns {JSX.Element} The rendered App component.
+ * 
+ * @see https://reactrouter.com/start/declarative/routing
  */
-function App() {
-  const [passes, setPasses] = useState([]);
-  const [violations, setViolations] = useState([]);
-  const [incomplete, setIncomplete] = useState([]);
-  const [inapplicable, setInapplicable] = useState([]);
-  const [testsRan, setTestsRan] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [newUrl, setUrl] = useState("");
-  const [activePage, setActivePage] = useState("page1");
-  const [dataLoaded, setDataLoaded] = useState(false);
-
-  const handleApiCall = async (url) => {
-    setLoading(true);
-    setError(null);
-    setUrl(url);
-    try {
-      setDataLoaded(false);
-      const { passes, violations, incomplete, inapplicable, testsRan } = await handleAxeApiCall(url, setLoading, setError);
-      setPasses(passes);
-      setViolations(violations);
-      setIncomplete(incomplete);
-      setInapplicable(inapplicable);
-      setTestsRan(testsRan);
-      setDataLoaded(true);
-    } catch (err) {
-      setError("Error fetching the violations");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+export default function App() {
+  const [modalOpen, setModalOpen] = useState(true);
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <TopBar onSubmit={handleApiCall} setActivePage={setActivePage} />
-      {!dataLoaded && !loading ? (
-        <Box sx={{justifyContent: "center", alignItems: "center", height: "calc(100vh - 115px)", display: "flex", flexDirection: "column"}}>
-          <Typography variant="h6" sx={{ textAlign: "center", mt: 2 }}>
-            Enter a URL to get started
-          </Typography>
-        </Box>
-      ) : loading ? (
-        <LoadingScreen />
-      ) : dataLoaded && activePage === "page1" ? (
-          <Page1Report passes={passes} violations={violations} incomplete={incomplete} inapplicable={inapplicable} testsRan={testsRan} loading={loading} error={error} url={newUrl} />
-        ) : activePage === "page2" ? (
-          <Page2Metrics />
-        ) : (
-          <Page3Frameworks />
-        )}
-    </ThemeProvider>
+    <Router>
+      <Routes>
+        <Route path="/" element={<ModalInput
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}/>} />
+        <Route path="main-ui" element={<MainUI />}>
+          <Route index element={<Dashboard />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="analytics" element={<Analytics />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+      </Routes>
+    </Router>
   );
 }
-
-export default App;

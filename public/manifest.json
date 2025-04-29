@@ -1,22 +1,31 @@
 {
-    "manifest_version": 3,
-    "name": "My React Extension",
-    "version": "1.0",
-    "description": "A simple Chrome extension that opens a new tab with a React app.",
-    "action": {
-      "default_icon": {
-        "16": "icons/icon16.png",
-        "32": "icons/icon32.png"
-      }
-    },
-    "background": {
-      "service_worker": "/background.js"
-    },
-    "permissions": ["tabs"],
-    "web_accessible_resources": [
-      {
-        "resources": ["index.html", "static/*"],
-        "matches": ["<all_urls>"]
-      }
-    ]
+  "manifest_version": 3,
+  "name": "Accessibility Modal Extension",
+  "version": "1.0",
+  "description": "Injects an accessibility modal using React and MUI",
+  "permissions": [
+    "storage",
+    "tabs",
+    "scripting",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "index.html",
+        "static/js/*.js",
+        "static/css/*.css"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "action": {
+    "default_icon": "icon.png"
   }
+}

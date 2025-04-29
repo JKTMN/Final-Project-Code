@@ -10,15 +10,15 @@ import { removeScheme } from "../../functions/utilityFunctions";
  * 
  * @see https://mui.com/material-ui/react-app-bar/
  */
-const TopBar = ({ onSubmit, setActivePage }) => {
-  const [url, setUrl] = useState("");
+const TopBar = ({ setActivePage, url }) => {
+  // const [url, setUrl] = useState("");
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (url) {
-      onSubmit(url);
-    }
-  };
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   if (url) {
+  //     onSubmit(url);
+  //   }
+  // };
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "#23222F", padding: 2 }}>
@@ -38,7 +38,7 @@ const TopBar = ({ onSubmit, setActivePage }) => {
           {url ? `Auditing: ${removeScheme(url)}` : "Accessibility Auditor"}
         </Typography>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, backgroundColor: "#F5F5F5", padding: "6px", borderRadius: "8px" }}>
+        {/* <Box sx={{ display: "flex", alignItems: "center", gap: 1, backgroundColor: "#F5F5F5", padding: "6px", borderRadius: "8px" }}>
           <TextField
             variant="outlined"
             size="small"
@@ -54,7 +54,7 @@ const TopBar = ({ onSubmit, setActivePage }) => {
           >
             Submit
           </Button>
-        </Box>
+        </Box> */}
 
       </Toolbar>
     </AppBar>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography, Fade } from "@mui/material";
 
 /**
  * A loading screen component that displays a circular progress indicator and a message.
@@ -9,21 +9,24 @@ import { Box, CircularProgress, Typography } from "@mui/material";
  */
 const LoadingScreen = () => {
     return (
+        <Fade in timeout={900}>
         <Box
-        sx={{
+          sx={{
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            height: "100vh",
-            bgcolor: "#f4f4f4",
-        }}
+            minHeight: "100vh",
+            width: "100vw",
+            backgroundColor: 'background.default',
+          }}
         >
-        <CircularProgress size={60} color="primary" />
-        <Typography variant="h6" sx={{ mt: 2 }}>
-            Loading, please wait...
-        </Typography>
+          <CircularProgress size={60} color="primary" />
+          <Typography variant="h6" sx={{ mt: 2 }}>
+              Loading, please wait...
+          </Typography>
         </Box>
+      </Fade>
     );
 };
 

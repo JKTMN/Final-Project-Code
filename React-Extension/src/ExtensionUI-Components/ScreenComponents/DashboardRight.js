@@ -1,0 +1,43 @@
+import React, { useState } from "react";
+import { Box, useTheme, useMediaQuery, Typography } from "@mui/material";
+import WebIframe from "../SmallComponents/WebIframe";
+import HighlightSwitch from "../SmallComponents/HighlightSwitch";
+
+/**
+ * DashboardRight Component
+ * 
+ * This component is responsible for rendering the right side of the dashboard.
+ * It includes a switch to highlight violations and an iframe to display the webpage.
+ * 
+ * @param {String} url - The URL to be displayed in the iframe.
+ * @param {String} chosenList - The selected list of violations to be highlighted. 
+ * @returns The rendered DashboardRight component.
+ */
+const DashboardRight = ({ url, chosenList }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [violationHightlght, setViolationHighlight] = useState(false); //default to true 
+
+  return (
+    <Box sx={{ 
+      width: "100%",
+      height: "100vh",
+      display: "flex",
+      flexDirection: "column",
+      px: isMobile ? 1 : 2
+    }}>
+      <Box sx={{mb: 2,}}>
+        <HighlightSwitch setViolationHighlight={setViolationHighlight} selectedValue={chosenList}/>
+      </Box>
+
+      <Box sx={{
+        flex: 1,
+        overflow: "hidden",
+      }}>
+        <WebIframe url={url} />
+      </Box>
+    </Box>
+  );
+};
+
+export default DashboardRight;
