@@ -54,6 +54,7 @@ const MainUI = () => {
         alert('An error occurred while fetching the audit results. Please try again. Or check the URL.');
       } finally {
         setLoading(false);
+        console.log("Tests Ran:", auditResults?.testsRan.length);
       }
     };
     handleApiCall(storedUrl);

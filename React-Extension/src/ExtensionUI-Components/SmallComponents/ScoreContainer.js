@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, useTheme, Typography } from '@mui/material';
+import InformationButton from './InformationButton';
 
 /**
  * ScoreContainer Component
@@ -12,16 +13,31 @@ import { Box, useTheme, Typography } from '@mui/material';
 const ScoreContainer = ({ score }) => {
     const theme = useTheme();
 
+    let backgroundColor;
+    let textColor = theme.palette.common.white;
+
+    if (score <= 33) {
+        backgroundColor = 'red';
+        textColor = theme.palette.common.white;
+    } else if (score <= 66) {
+        backgroundColor = 'orange';
+        textColor = theme.palette.common.white;
+    } else {
+        backgroundColor = 'green';
+        textColor = theme.palette.common.white;
+    }
+
     return (
       <Box
         sx={{
           width: 200,
           height: 200,
           borderRadius: '50%',
-          backgroundColor: theme.palette.primary.main,
+          backgroundColor: backgroundColor,
           margin: theme.spacing(1, 'auto'),
           justifyContent: 'center',
           alignItems: 'center',
+          display: 'flex',
           flexShrink: 0,
           [theme.breakpoints.down('sm')]: {
             width: 100,
@@ -33,9 +49,17 @@ const ScoreContainer = ({ score }) => {
           },
         }}
       >
-        <Typography variant="h4" sx={{ color: theme.palette.common.white, textAlign: 'center', lineHeight: '200px' }}>
-            {score}
+        <Typography 
+          variant="h4" 
+          sx={{ 
+            color: textColor, 
+            textAlign: 'center', 
+            lineHeight: '200px',
+          }}
+        >
+            {score}%
         </Typography>
+        <InformationButton onClick={null} toolTip="This accessibility score was calculated using this equation: 'passes / total elements * 100"/>
       </Box>
     );
 }

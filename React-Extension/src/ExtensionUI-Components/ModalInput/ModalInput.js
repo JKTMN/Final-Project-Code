@@ -1,6 +1,6 @@
 /* global chrome */
 import React, { useState } from 'react';
-import { Modal, Box, Typography, TextField, Button, IconButton } from '@mui/material';
+import { Modal, Box, Typography, TextField, Button, IconButton, Divider } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
 const modalStyle = {
@@ -30,6 +30,7 @@ const validURL = (str) => {
  * 
  * This component renders a modal overlay that allows the user to input a URL manually or use the current tab's URL.
  * It provides a text field for manual URL input and two buttons: one to run the audit with the entered URL and another to use the current tab's URL.
+ * There is also a button to open the image caption generator.
  * @param {Boolean} open - Indicates whether the modal is open or closed.
  * @param {Function} onClose - Callback function to close the modal.
  * 
@@ -69,6 +70,15 @@ const ModalOverlay = ({ open, onClose }) => {
         alert('Current tab URL is invalid or unavailable.');
       }
     });
+  };
+
+  const handleOpenCaptionGenerator = () => {
+    if (chrome?.tabs?.create) {
+      chrome.tabs.create({
+        url: chrome.runtime.getURL('index.html#/main-ui/caption-generator/')
+      });
+    }
+    onClose();
   };
 
   const storeAndOpen = (targetUrl) => {
@@ -121,6 +131,15 @@ const ModalOverlay = ({ open, onClose }) => {
             Use Current URL
           </Button>
         </Box>
+        <Divider sx={{ my: 2 }} />
+
+        <Button 
+          variant="outlined" 
+          fullWidth
+          onClick={handleOpenCaptionGenerator}
+        >
+          Open Image Caption Generator
+        </Button>
       </Box>
     </Modal>
   );

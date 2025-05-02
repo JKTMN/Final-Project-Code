@@ -6,6 +6,7 @@ import TabsComponent from '../SmallComponents/TabsComponent';
 import ResultsList from '../SmallComponents/ResultsList';
 import FilterSelect from '../SmallComponents/FilterSelect';
 import ScoreContainer from '../SmallComponents/ScoreContainer';
+import { calculateAccessibilityScore } from '../../functions/calculateAccessibilityScore';
 
 /**
  * DashboardLeft Component
@@ -27,6 +28,7 @@ const DashboardLeft = ({ auditResults, url, chosenList, setChosenList }) => {
     const [filters, setFilters] = useState([]);
     const [filter, setFilter] = useState({});
     const [listData, setListData] = useState(passes);
+    const [calculatedScore, setCalculatedScore] = useState(0);
 
     useEffect(() => {
     const uniqueTags = [...new Set(listData.flatMap(listItem => listItem.tags))];
@@ -53,6 +55,10 @@ const DashboardLeft = ({ auditResults, url, chosenList, setChosenList }) => {
     setListData(listMapping[chosenList] || []);
     setFilter("all");
     }, [chosenList, auditResults]);
+
+    useEffect(() => {
+        setCalculatedScore(calculateAccessibilityScore(testsRan.length, passes.length, inapplicable.length));
+    }, [passes, testsRan, inapplicable]);
     
 
     return (
@@ -82,7 +88,7 @@ const DashboardLeft = ({ auditResults, url, chosenList, setChosenList }) => {
                 </Typography>
             </Box>
 
-            <ScoreContainer score={'100%'} />
+            <ScoreContainer score={calculatedScore} />
 
             <Box sx={{ width: '100%', mb: 1}}>
                 <TabsComponent setChosenList={setChosenList} tabLabels={tabLabels} />

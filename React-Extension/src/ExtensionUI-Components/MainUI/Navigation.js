@@ -2,14 +2,15 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, Tooltip } from '@mui/material';
-import { Dashboard, Analytics, Settings } from '@mui/icons-material';
+import { Dashboard, MenuBook } from '@mui/icons-material';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 
 
 const menuItems = [
   { text: 'Dashboard', icon: <Dashboard />, path: '/main-ui/dashboard' },
-  { text: 'Analytics', icon: <Analytics />, path: '/main-ui/analytics' },
-  { text: 'Settings', icon: <Settings />, path: '/main-ui/settings' },
+  { text: 'Guides', icon: <MenuBook />, path: '/main-ui/guides' },
+  { text: 'Caption Generator', icon: <AddPhotoAlternateIcon />, path: '/main-ui/caption-generator' },
 ];
 
 /**

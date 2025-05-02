@@ -3,8 +3,8 @@ import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import ModalInput from './ExtensionUI-Components/ModalInput/ModalInput';
 import MainUI from './ExtensionUI-Components/MainUI/MainUI';
 import Dashboard from './ExtensionUI-Components/Pages/Dashboard';
-import Analytics from './ExtensionUI-Components/Pages/Analytics';
-import Settings from './ExtensionUI-Components/Pages/Settings';
+import Guides from './ExtensionUI-Components/Pages/Guides';
+import CaptionGenerator from './ExtensionUI-Components/Pages/caption-generator';
 
 /**
  * App Component
@@ -28,8 +28,8 @@ export default function App() {
         <Route path="main-ui" element={<MainUI />}>
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="analytics" element={<Analytics />} />
-          <Route path="settings" element={<Settings />} />
+          <Route path="guides" element={<Guides />} />
+          <Route path="caption-generator" element={<CaptionGenerator />} />
         </Route>
       </Routes>
     </Router>
