@@ -1,7 +1,7 @@
 /* global chrome */
 import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Drawer, Box, CssBaseline, IconButton, useMediaQuery, useTheme, Fade, Backdrop } from '@mui/material';
+import { Drawer, Box, CssBaseline, IconButton, useMediaQuery, useTheme, Fade, Backdrop, Tooltip } from '@mui/material';
 import { Menu, ChevronLeft, ChevronRight } from '@mui/icons-material';
 import Navigation from './Navigation';
 import { handleAxeApiCall } from '../../functions/handleAxeApiCall';
@@ -78,19 +78,20 @@ const MainUI = () => {
     <Fade in timeout={900}>
       <Box sx={{ display: 'flex', position: 'relative', height: '100vh' }}>
         <CssBaseline />
-
-        <IconButton
-          color="inherit"
-          onClick={handleDrawerToggle}
-          sx={{
-            position: 'fixed',
-            top: 16,
-            left: 16,
-            zIndex: theme.zIndex.drawer + 2,
-          }}
-        >
-          {isMobile ? <Menu /> : collapsed ? <ChevronRight /> : <ChevronLeft />}
-        </IconButton>
+        <Tooltip title={collapsed ? 'Expand' : 'Collapse'} arrow placement="right">
+          <IconButton
+            color="inherit"
+            onClick={handleDrawerToggle}
+            sx={{
+              position: 'fixed',
+              top: 16,
+              left: 16,
+              zIndex: theme.zIndex.drawer + 2,
+            }}
+          >
+            {isMobile ? <Menu /> : collapsed ? <ChevronRight /> : <ChevronLeft />}
+          </IconButton>
+        </Tooltip>
 
         <Drawer
           variant={isMobile ? 'temporary' : 'persistent'}

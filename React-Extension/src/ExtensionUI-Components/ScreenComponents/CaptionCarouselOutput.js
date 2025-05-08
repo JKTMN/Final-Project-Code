@@ -51,7 +51,6 @@ const CaptionCarouselOutput = ({ data, theme, isMobile }) => {
         minHeight: isMobile ? 'auto' : 'calc(100vh - 220px)',
         width: '100%',
         mx: 'auto',
-        mb: 2,
         textAlign: 'center',
       }}
     >
@@ -134,18 +133,18 @@ const CaptionCarouselOutput = ({ data, theme, isMobile }) => {
           </Tooltip>
         </Box>
 
-        <Divider sx={{ my: 2 }} />
+        <Divider sx={{ my: 1 }} />
 
         <Box sx={{ textAlign: 'left' }}>
           <Typography variant="subtitle2" gutterBottom>
-            HTML Implementation:
+          Example usage in HTML:
           </Typography>
           <Box
             component="pre"
             sx={{
               whiteSpace: 'pre-wrap',
               backgroundColor: theme.palette.grey[200],
-              p: 1.5,
+              p: 0.5,
               borderRadius: 1,
               fontSize: '0.85rem',
             }}

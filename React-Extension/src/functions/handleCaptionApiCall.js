@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 /**
  * GenerateCaptionFromFile function
  * This function takes a file as input and sends it to the server to generate a caption.
@@ -9,10 +11,7 @@ export const generateCaptionFromFile = async (file) => {
     const formData = new FormData();
     formData.append('image', file);
   
-    const response = await fetch('http://localhost:3001/api/caption/file', {
-      method: 'POST',
-      body: formData,
-    });
+    const response = await axios.post('http://localhost:3001/api/caption/file', formData);
   
     if (!response.ok) {
       throw new Error('Failed to generate caption from file');
@@ -32,10 +31,7 @@ export const generateCaptionFromUrl = async (url) => {
     const formData = new FormData();
     formData.append('url', url);
   
-    const response = await fetch('http://localhost:3001/api/caption/source', {
-      method: 'POST',
-      body: formData,
-    });
+    const response = await axios.post('http://localhost:3001/api/caption/source', formData);
   
     if (!response.ok) {
       throw new Error('Failed to generate caption from URL');
@@ -55,10 +51,7 @@ export const generateCaptionsFromWebsiteURL = async (url) => {
     const formData = new FormData();
     formData.append('url', url);
 
-    const response = await fetch('http://localhost:3001/api/captions/website', {
-        method: 'POST',
-        body: formData,
-    });
+    const response = await axios.post('http://localhost:3001/api/captions/website', formData);
 
     if (!response.ok) {
         throw new Error('Failed to generate captions from website URL');

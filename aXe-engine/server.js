@@ -4,6 +4,8 @@
  * @param {res} Object - The response object.
  * @returns {Object} - Returns an object containing the violations found in the audit.
  * Based on {@link https://github.com/dequelabs/axe-puppeteer}
+ * 
+ * @see https://www.npmjs.com/package/validator
  */
 const express = require('express');
 const puppeteer = require('puppeteer');
@@ -21,17 +23,21 @@ const port = 3001;
 
 app.use(express.json());
 app.use(fileUpload());
-app.use(cors({
-    origin: ['http://localhost:3000', 'chrome-extension://pmgmglmdclpaipolmofbkjbigaabcohj']
-}));
+app.use(cors());
 
-const validMimeTypes = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg']);
+const validMimeTypes = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
 
 const path = require('path');
 const uploadDir = './uploads';
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
 }
+
+
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'OK' });
+});
+
 
 const formatResults = async (items, pageUrl = '') => {
         const results = await Promise.all(items.map(async item => {
@@ -58,6 +64,10 @@ const formatResults = async (items, pageUrl = '') => {
         return results;
     };
 
+
+
+
+
 const runAccessibilityAudit = async (url) => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
@@ -82,6 +92,8 @@ const runAccessibilityAudit = async (url) => {
     };
 };
 
+
+
 app.post('/api/audit', async (req, res) => {
     const { url } = req.body;
 
@@ -99,6 +111,8 @@ app.post('/api/audit', async (req, res) => {
 });
 
 
+
+
 app.post('/api/caption/file', async (req, res) => {
     const start = Date.now();
     try {
@@ -113,7 +127,7 @@ app.post('/api/caption/file', async (req, res) => {
       const imagePath = `./uploads/${Date.now()}_${image.name}`;
       await image.mv(imagePath);
   
-      const pythonProcess = spawn('python', ['caption_generator.py', imagePath]);
+      const pythonProcess = spawn('python3', ['caption_generator.py', imagePath]);
       let caption = '';
   
       pythonProcess.stdout.on('data', (data) => {
@@ -136,6 +150,10 @@ app.post('/api/caption/file', async (req, res) => {
   });
   
 
+
+
+
+
 app.post('/api/caption/source', async (req, res) => {
     const start = Date.now();
     try {
@@ -156,7 +174,7 @@ app.post('/api/caption/source', async (req, res) => {
       const buffer = Buffer.from(arrayBuffer);
       await fs.promises.writeFile(imagePath, buffer);
   
-      const pythonProcess = spawn('python', ['caption_generator.py', imagePath]);
+      const pythonProcess = spawn('python3', ['caption_generator.py', imagePath]);
       let caption = '';
   
       pythonProcess.stdout.on('data', (data) => {
@@ -179,7 +197,11 @@ app.post('/api/caption/source', async (req, res) => {
     }
   });
 
-  const scrapeImageSources = async (url) => {
+
+
+
+
+const scrapeImageSources = async (url) => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     
@@ -201,6 +223,10 @@ app.post('/api/caption/source', async (req, res) => {
         await browser.close();
     }
 };
+
+
+
+
 
 app.post('/api/captions/website', async (req, res) => {
     const start = Date.now();
@@ -243,7 +269,7 @@ app.post('/api/captions/website', async (req, res) => {
             return res.status(400).json({ error: 'No processable images found' });
         }
 
-        const pythonProcess = spawn('python', ['caption_generator.py', ...tempPaths]);
+        const pythonProcess = spawn('python3', ['caption_generator.py', ...tempPaths]);
         let output = '';
         let errorOutput = '';
 
@@ -286,6 +312,6 @@ app.post('/api/captions/website', async (req, res) => {
 });
 
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0',() => {
     console.log(`Server running at http://localhost:${port}`);
 });

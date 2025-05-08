@@ -4,7 +4,7 @@ import ModalInput from './ExtensionUI-Components/ModalInput/ModalInput';
 import MainUI from './ExtensionUI-Components/MainUI/MainUI';
 import Dashboard from './ExtensionUI-Components/Pages/Dashboard';
 import Guides from './ExtensionUI-Components/Pages/Guides';
-import CaptionGenerator from './ExtensionUI-Components/Pages/caption-generator';
+import AltTextGenerator from './ExtensionUI-Components/Pages/alt-text-generator';
 
 /**
  * App Component
@@ -29,7 +29,7 @@ export default function App() {
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="guides" element={<Guides />} />
-          <Route path="caption-generator" element={<CaptionGenerator />} />
+          <Route path="alt-text-generator" element={<AltTextGenerator />} />
         </Route>
       </Routes>
     </Router>

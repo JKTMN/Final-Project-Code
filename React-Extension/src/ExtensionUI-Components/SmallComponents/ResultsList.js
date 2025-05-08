@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Box, Typography, Card, CardContent, Button, Divider, useMediaQuery } from "@mui/material";
+import React, { useState, useEffect, useRef } from "react";
+import {  Box,  Typography,  Card,  CardContent,  Button,  IconButton,  useMediaQuery  } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { removeHyphen } from "../../functions/utilityFunctions";
 import ResultsModal from "./ResultsModal";
 
@@ -20,10 +21,14 @@ import ResultsModal from "./ResultsModal";
 const ResultsList = ({ title, listData, chosenList, filter }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const scrollContainerRef = useRef(null);
   const [filteredList, setFilteredList] = useState(listData);
   const [selectedItem, setSelectedItem] = useState(null);
   const [open, setOpen] = useState(false);
-  
+  const [isLeftDisabled, setIsLeftDisabled] = useState(true);
+  const [isRightDisabled, setIsRightDisabled] = useState(false);
+  const [numPages, setNumPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const handleOpen = (item) => {
     setSelectedItem(item);
@@ -40,6 +45,57 @@ const ResultsList = ({ title, listData, chosenList, filter }) => {
       setFilteredList(listData);
     } else {
       setFilteredList(listData.filter(listItem => listItem.tags.includes(filter)));
+    }
+  }, [filter, listData, chosenList]);
+
+  const handleScrollLeft = () => {
+    scrollContainerRef.current?.scrollBy({
+      left: -scrollContainerRef.current.clientWidth,
+      behavior: 'smooth'
+    });
+  };
+
+  const handleScrollRight = () => {
+    scrollContainerRef.current?.scrollBy({
+      left: scrollContainerRef.current.clientWidth,
+      behavior: 'smooth'
+    });
+  };
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const { scrollLeft, scrollWidth, clientWidth } = container;
+      setIsLeftDisabled(scrollLeft === 0);
+      setIsRightDisabled(scrollLeft + clientWidth >= scrollWidth);
+      setCurrentPage(Math.round(scrollLeft / clientWidth));
+    };
+
+    const updatePages = () => {
+      const newNumPages = Math.ceil(container.scrollWidth / container.clientWidth);
+      setNumPages(newNumPages);
+    };
+
+    const resizeObserver = new ResizeObserver(() => {
+      updatePages();
+      handleScroll();
+    });
+
+    container.addEventListener('scroll', handleScroll);
+    resizeObserver.observe(container);
+
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+      resizeObserver.unobserve(container);
+    };
+  }, [filteredList]);
+
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollLeft = 0;
+      setCurrentPage(0);
     }
   }, [filter, listData, chosenList]);
 
@@ -69,6 +125,7 @@ const ResultsList = ({ title, listData, chosenList, filter }) => {
       overflow: 'hidden',
       backgroundColor: theme.palette.background.default,
       borderRadius: theme.shape.borderRadius,
+      position: 'relative'
     }}>
       <Typography 
         variant={isMobile ? "h5" : "h4"} 
@@ -82,7 +139,61 @@ const ResultsList = ({ title, listData, chosenList, filter }) => {
         {title}
       </Typography>
 
+      {filteredList.length > 0 && (
+        <Box sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          gap: 1,
+          mb: 2
+        }}>
+          <IconButton 
+            onClick={handleScrollLeft} 
+            disabled={isLeftDisabled}
+            sx={{ 
+              color: theme.palette.primary.main,
+              visibility: isMobile ? 'hidden' : 'visible'
+            }}
+          >
+            <ChevronLeft fontSize={isMobile ? "small" : "medium"} />
+          </IconButton>
+
+          {Array.from({ length: numPages }).map((_, index) => (
+            <Box
+              key={index}
+              sx={{
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                bgcolor: currentPage === index ? 'primary.main' : 'action.disabled',
+                cursor: 'pointer',
+                transition: 'background-color 0.3s',
+                '&:hover': { bgcolor: 'primary.dark' }
+              }}
+              onClick={() => {
+                scrollContainerRef.current?.scrollTo({
+                  left: index * scrollContainerRef.current.clientWidth,
+                  behavior: 'smooth'
+                });
+              }}
+            />
+          ))}
+
+          <IconButton 
+            onClick={handleScrollRight} 
+            disabled={isRightDisabled}
+            sx={{ 
+              color: theme.palette.primary.main,
+              visibility: isMobile ? 'hidden' : 'visible'
+            }}
+          >
+            <ChevronRight fontSize={isMobile ? "small" : "medium"} />
+          </IconButton>
+        </Box>
+      )}
+
       <Box
+        ref={scrollContainerRef}
         sx={{
           display: "flex",
           overflowX: "auto",

@@ -10,7 +10,7 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 const menuItems = [
   { text: 'Dashboard', icon: <Dashboard />, path: '/main-ui/dashboard' },
   { text: 'Guides', icon: <MenuBook />, path: '/main-ui/guides' },
-  { text: 'Caption Generator', icon: <AddPhotoAlternateIcon />, path: '/main-ui/caption-generator' },
+  { text: 'Alt-text Generator', icon: <AddPhotoAlternateIcon />, path: '/main-ui/alt-text-generator' },
 ];
 
 /**

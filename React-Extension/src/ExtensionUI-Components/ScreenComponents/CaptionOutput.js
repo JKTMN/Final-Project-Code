@@ -68,8 +68,8 @@ const CaptionOutput = ({ previewSrc, caption, copied, handleCopy, theme, isMobil
 
         {caption && (
           <>
-            <Divider sx={{ my: 1 }} /> {/*2*/}
-            <Typography variant="subtitle1" gutterBottom> 2
+            <Divider sx={{ my: 1 }} />
+            <Typography variant="subtitle1" gutterBottom>
               Example usage in HTML:
             </Typography>
             <Box
@@ -99,7 +99,7 @@ const CaptionOutput = ({ previewSrc, caption, copied, handleCopy, theme, isMobil
         textAlign="center"
         sx={{ mt: 5 }}
       >
-        Image preview and caption will appear here after submission.
+        Image preview and alt-text will appear here after submission.
       </Typography>
     )}
   </Paper>

@@ -16,60 +16,60 @@ import InformationButton from '../SmallComponents/InformationButton';
  * @returns The rendered ImageUploadForm component.
  */
 const ImageUploadForm = ({ imageUrl, handleUrlChange, handleFileChange, file, handleSubmit, loading}) => (
-  <Card>
+<Card>
     <CardContent>
-      <Box sx={{ 
+    <Box sx={{ 
         display: 'flex', 
         flexDirection: 'row', 
         alignItems: 'center', 
         justifyContent: 'center',
         mb: 2 
-      }}>
+    }}>
         <Typography variant="h6" gutterBottom>
-          Upload or Enter Image URL
+        Upload or Enter Image URL
         </Typography>
         <InformationButton 
-          onclick={null}
-          toolTip="Please ensure the image URL is publicly accessible and ends with .jpg, .jpeg, .png or .webp" 
+        onclick={null}
+        toolTip="Please ensure the image URL is publicly accessible and ends with .jpg, .jpeg, .png or .webp" 
         />
-      </Box>
+    </Box>
 
-      <TextField
+    <TextField
         fullWidth
         label="Image URL"
         variant="outlined"
         value={imageUrl}
         onChange={handleUrlChange}
         sx={{ mb: 2 }}
-      />
+    />
 
-      <Typography textAlign="center" variant="body2" mb={1}>
+    <Typography textAlign="center" variant="body2" mb={1}>
         or upload an image file
-      </Typography>
+    </Typography>
 
-      <Box sx={{ textAlign: 'center', mb: 1 }}>
+    <Box sx={{ textAlign: 'center', mb: 1 }}>
         <Button variant="outlined" component="label">
-          Choose File
-          <input type="file" hidden accept="image/*" onChange={handleFileChange} />
+        Choose File
+        <input type="file" hidden accept="image/*" onChange={handleFileChange} />
         </Button>
         {file && (
-          <Typography variant="body2" sx={{ mt: 1, wordBreak: 'break-word' }}>
+        <Typography variant="body2" sx={{ mt: 1, wordBreak: 'break-word' }}>
             {file.name}
-          </Typography>
+        </Typography>
         )}
-      </Box>
+    </Box>
 
-      <Box textAlign="center" mt={3}>
+    <Box textAlign="center" mt={3}>
         <Button
-          variant="contained"
-          onClick={handleSubmit}
-          disabled={!(file || imageUrl) || loading}
+        variant="contained"
+        onClick={handleSubmit}
+        disabled={!(file || imageUrl) || loading}
         >
-          {loading ? 'Loading...' : 'Generate Caption'}
+        {loading ? 'Loading...' : 'Generate Alt-text'}
         </Button>
-      </Box>
+    </Box>
     </CardContent>
-  </Card>
+</Card>
 );
 
 export default ImageUploadForm;

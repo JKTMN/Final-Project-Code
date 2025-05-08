@@ -90,7 +90,7 @@ const DashboardLeft = ({ auditResults, url, chosenList, setChosenList }) => {
 
             <ScoreContainer score={calculatedScore} />
 
-            <Box sx={{ width: '100%', mb: 1}}>
+            <Box sx={{ width: '100%', mb: 0.5}}>
                 <TabsComponent setChosenList={setChosenList} tabLabels={tabLabels} />
             </Box>
 
@@ -98,7 +98,7 @@ const DashboardLeft = ({ auditResults, url, chosenList, setChosenList }) => {
             <FilterSelect filters={filters} setFilter={setFilter} width={120}/>
             </Box>
 
-            <Box sx={{ width: '100%', flex: 1, minHeight: 0,}}>
+            <Box sx={{ width: '100%', flex: 1}}>
                 <ResultsList title={chosenList} listData={listData} chosenList={chosenList} filter={filter}/>
             </Box> 
         </Box>

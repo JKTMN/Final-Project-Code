@@ -25,7 +25,7 @@ const WebsiteCaptionForm = ({ websiteUrl, setWebsiteUrl, handleWebsiteSubmit, lo
         mb: 2 
       }}>
         <Typography variant="h6" gutterBottom>
-          Generate Captions for Your Website
+          Generate alt-text for Your Website
         </Typography>
         <InformationButton 
           onclick={null}
@@ -46,7 +46,7 @@ const WebsiteCaptionForm = ({ websiteUrl, setWebsiteUrl, handleWebsiteSubmit, lo
           onClick={handleWebsiteSubmit}
           disabled={!websiteUrl}
         >
-          {loading ? 'Loading...' : 'Generate Captions For Your Website'}
+          {loading ? 'Loading...' : 'Generate Alt-text For Your Website'}
         </Button>
       </Box>
     </CardContent>

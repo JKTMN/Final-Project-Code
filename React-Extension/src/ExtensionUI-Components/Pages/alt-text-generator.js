@@ -16,7 +16,7 @@ import { generateCaptionFromFile, generateCaptionFromUrl, generateCaptionsFromWe
  * 
  * @returns The rendered CaptionGenerator component.
  */
-const CaptionGenerator = () => {
+const AltTextGenerator = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -97,7 +97,7 @@ const CaptionGenerator = () => {
   return (
     <Box sx={{ p: isMobile ? 2 : 3 }}>
       <Typography variant="h4" fontWeight={600} mb={2} textAlign="center">
-        Image Caption Generator
+        Alt-Text Generator
       </Typography>
       <Box sx={{ pl: isMobile ? 0 : '80px' }}>
         <Grid container spacing={4}>
@@ -119,8 +119,15 @@ const CaptionGenerator = () => {
           </Grid>
           <Grid item xs={12} md={7}>
             {loading ? (
-              <Box sx={{ textAlign: 'center', p: 4 }}>
-                <Typography>Generating captions...</Typography>
+              <Box sx={{ 
+                height: '100%', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                border: '1px dashed',
+                borderRadius: 2
+              }}>
+                <Typography>Generating Alt-texts...</Typography>
               </Box>
             ) : (
               <>
@@ -137,7 +144,7 @@ const CaptionGenerator = () => {
                   />
                 ) : (
                   <Box sx={{ 
-                    height: 300, 
+                    height: '100%', 
                     display: 'flex', 
                     alignItems: 'center', 
                     justifyContent: 'center',
@@ -145,7 +152,7 @@ const CaptionGenerator = () => {
                     borderRadius: 2
                   }}>
                     <Typography color="textSecondary">
-                      Your generated captions will appear here
+                      Your generated alt-text will appear here
                     </Typography>
                   </Box>
                 )}
@@ -158,4 +165,4 @@ const CaptionGenerator = () => {
   );
 };
 
-export default CaptionGenerator;
+export default AltTextGenerator;

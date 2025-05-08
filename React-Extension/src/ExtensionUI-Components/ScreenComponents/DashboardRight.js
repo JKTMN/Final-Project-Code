@@ -21,10 +21,12 @@ const DashboardRight = ({ url, chosenList, auditResults }) => {
   return (
     <Box sx={{ 
       width: "100%",
-      height: "100vh",
+      height: "100%",
       display: "flex",
       flexDirection: "column",
-      px: isMobile ? 1 : 2
+      px: isMobile ? 1 : 2,
+      pt: isMobile ? 1 : 4,
+      pb: isMobile ? 1 : 2,
     }}>
       {/* <Box sx={{mb: 2,}}>
         <HighlightSwitch setViolationHighlight={setViolationHighlight} selectedValue={chosenList}/>
