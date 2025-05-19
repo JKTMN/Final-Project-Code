@@ -29,6 +29,9 @@ const ScoreContainer = ({ score }) => {
 
     return (
       <Box
+      role="region"
+      aria-label="Caclulated accessibility score:"
+      tabIndex={0}
         sx={{
           width: 200,
           height: 200,
@@ -59,7 +62,7 @@ const ScoreContainer = ({ score }) => {
         >
             {score}%
         </Typography>
-        <InformationButton onClick={null} toolTip="This accessibility score was calculated using this equation: 'passes / total elements * 100"/>
+        <InformationButton onClick={null} toolTip="This accessibility score was calculated using this equation: 'passes / total elements * 100" colour="white"/>
       </Box>
     );
 }

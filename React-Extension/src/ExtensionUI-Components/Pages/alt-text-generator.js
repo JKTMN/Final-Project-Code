@@ -1,12 +1,14 @@
 /* global chrome */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Box, Grid, useMediaQuery, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import ImageUploadForm from '../ScreenComponents/ImageUploadForm';
 import WebsiteCaptionForm from '../ScreenComponents/WebsiteCaptionForm';
 import CaptionOutput from '../ScreenComponents/CaptionOutput';
 import CaptionCarouselOutput from '../ScreenComponents/CaptionCarouselOutput';
+import { useLocation } from 'react-router-dom';
 import { generateCaptionFromFile, generateCaptionFromUrl, generateCaptionsFromWebsiteURL } from '../../functions/handleCaptionApiCall';
+import { validImageURL, validURL } from '../../functions/utilityFunctions';
 
 /**
  * CaptionGenerator component
@@ -19,6 +21,8 @@ import { generateCaptionFromFile, generateCaptionFromUrl, generateCaptionsFromWe
 const AltTextGenerator = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const headingRef = useRef(null);
+  const location = useLocation();
 
   const [imageUrl, setImageUrl] = useState('');
   const [file, setFile] = useState(null);
@@ -57,6 +61,10 @@ const AltTextGenerator = () => {
   };
 
   const handleSubmit = async () => {
+    if (!file && !validImageURL(imageUrl)) {
+      window.alert('Please enter a valid image URL (JPEG, PNG, WebP, GIF) or upload an image file.');
+      return;
+    }
     setLoading(true);
     setCaption('');
     setBatchCaptions([]);
@@ -80,6 +88,10 @@ const AltTextGenerator = () => {
   };
 
   const handleWebsiteSubmit = async () => {
+    if (!validURL(websiteUrl)) {
+      window.alert('Please enter a valid URL.');
+      return;
+    };
     setLoading(true);
     setCaption('');
     setBatchCaptions([]);
@@ -93,10 +105,18 @@ const AltTextGenerator = () => {
       setLoading(false);
     }
   };
+  
+  useEffect(() => {
+    setTimeout(() => {
+      if (headingRef.current) {
+        headingRef.current.focus();
+      }
+    }, 1000);
+  }, [theme, location.pathname, location.state]);
 
   return (
     <Box sx={{ p: isMobile ? 2 : 3 }}>
-      <Typography variant="h4" fontWeight={600} mb={2} textAlign="center">
+      <Typography ref={headingRef} tabIndex={-1} variant="h4" fontWeight={600} mb={2} textAlign="center">
         Alt-Text Generator
       </Typography>
       <Box sx={{ pl: isMobile ? 0 : '80px' }}>

@@ -30,9 +30,10 @@ const CaptionOutput = ({ previewSrc, caption, copied, handleCopy, theme, isMobil
     {previewSrc ? (
       <>
         <Box
+          role="img"
           component="img"
           src={previewSrc}
-          alt="Uploaded preview"
+          alt={caption || "Uploaded preview"}
           sx={{
             width: '100%',
             maxHeight: 300,
@@ -59,7 +60,7 @@ const CaptionOutput = ({ previewSrc, caption, copied, handleCopy, theme, isMobil
           </Typography>
           {caption && (
             <Tooltip title={copied ? 'Copied!' : 'Copy caption'}>
-              <IconButton onClick={handleCopy}>
+              <IconButton onClick={handleCopy} aria-label="Copy Caption">
                 <ContentCopyIcon fontSize="small" />
               </IconButton>
             </Tooltip>

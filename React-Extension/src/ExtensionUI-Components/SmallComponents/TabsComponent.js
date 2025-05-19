@@ -17,7 +17,6 @@ const TabsComponent = ({ setChosenList, tabLabels }) => {
   const [value, setValue] = useState(0);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
 
   useEffect(() => {
@@ -63,6 +62,7 @@ const TabsComponent = ({ setChosenList, tabLabels }) => {
       mx: 'auto'
     }}>
       <Tabs
+      aria-label="Result Category Tabs"
         value={value}
         onChange={handleTabChange}
         variant={isMobile ? "scrollable" : "fullWidth"}

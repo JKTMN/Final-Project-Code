@@ -9,7 +9,7 @@ import { Box, Typography, Divider, useTheme } from '@mui/material';
  * 
  * @returns The rendered ResultsModalScreen1 component.
  */
-const ResultsModalScreen1 = ({ listItem, issue_explanation, impact }) => {
+const ResultsModalScreen1 = ({ page, listItem, issue_explanation, impact }) => {
   const theme = useTheme();
 
   const getImpactColor = (level) => {
@@ -30,6 +30,10 @@ const ResultsModalScreen1 = ({ listItem, issue_explanation, impact }) => {
 
   return (
     <Box
+      id={`results-modal-page-${page}-content`}
+      role="region"
+      aria-labelledby="results-modal-title"
+      aria-live="polite"
       sx={{
         width: '100%',
         display: 'flex',
@@ -38,10 +42,18 @@ const ResultsModalScreen1 = ({ listItem, issue_explanation, impact }) => {
       }}
     >
       <Box>
-        <Typography variant="h6" sx={{ mb: 1 }}>
+        <Typography variant="h6" component="h3" id={`impact-heading-${page}`}>
           Impact
         </Typography>
-        <Typography variant="body1" sx={{ color: getImpactColor(listItem?.impact), textTransform: 'capitalize', fontWeight: 600 }}>
+        <Typography 
+          aria-labelledby={`impact-heading-${page}`}
+          variant="body1" 
+          sx={{ 
+            color: getImpactColor(listItem?.impact), 
+            textTransform: 'capitalize', 
+            fontWeight: 600 
+          }}
+        >
           {listItem?.impact || "Unknown"}
         </Typography>
       </Box>
@@ -49,10 +61,14 @@ const ResultsModalScreen1 = ({ listItem, issue_explanation, impact }) => {
       <Divider />
 
       <Box>
-        <Typography variant="h6" sx={{ mb: 1 }}>
+        <Typography variant="h6" component="h3" id={`description-heading-${page}`}>
           Description
         </Typography>
-        <Typography variant="body1" color="text.secondary">
+        <Typography 
+          aria-labelledby={`description-heading-${page}`}
+          variant="body1" 
+          color="text.secondary"
+        >
           {issue_explanation || "No description available."}
         </Typography>
       </Box>
@@ -60,10 +76,14 @@ const ResultsModalScreen1 = ({ listItem, issue_explanation, impact }) => {
       <Divider />
 
       <Box>
-        <Typography variant="h6" sx={{ mb: 1 }}>
+        <Typography variant="h6" component="h3" id={`importance-heading-${page}`}>
           Why This Matters
         </Typography>
-        <Typography variant="body1" color="text.secondary">
+        <Typography 
+          aria-labelledby={`importance-heading-${page}`}
+          variant="body1" 
+          color="text.secondary"
+        >
           {impact?.description || "No additional information provided."}
         </Typography>
       </Box>

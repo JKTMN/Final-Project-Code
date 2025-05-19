@@ -8,12 +8,16 @@ import { Box, Typography, List, ListItem, Divider } from '@mui/material';
  * 
  * @returns The rendered ResultsModalScreen2 component.
  */
-const ResultsModalScreen2 = ({ technical_analysis, best_practices }) => {
+const ResultsModalScreen2 = ({ page, technical_analysis, best_practices }) => {
   const isCommonCausesArray = Array.isArray(technical_analysis?.common_causes);
   const isBestPracticesArray = Array.isArray(best_practices);
 
   return (
     <Box
+      id={`results-modal-page-${page}-content`}
+      role="region"
+      aria-labelledby="results-modal-title"
+      aria-live="polite"
       sx={{
         width: '100%',
         display: 'flex',
@@ -22,14 +26,14 @@ const ResultsModalScreen2 = ({ technical_analysis, best_practices }) => {
       }}
     >
       <Box>
-        <Typography variant="h6" sx={{ mb: 1 }}>
+        <Typography variant="h6" component="h3" id={`causes-heading-${page}`}>
           Common Causes
         </Typography>
-        <List dense disablePadding>
+        <List aria-labelledby={`causes-heading-${page}`} dense disablePadding>
           {isCommonCausesArray && technical_analysis.common_causes.length > 0 ? (
             technical_analysis.common_causes.map((cause, index) => (
               <ListItem key={index} sx={{ pl: 0 }}>
-                <Typography variant="body1" color="text.secondary" sx={{ textTransform: 'capitalize' }}>
+                <Typography variant="body1" color="text.secondary">
                   • {cause}
                 </Typography>
               </ListItem>
@@ -45,14 +49,14 @@ const ResultsModalScreen2 = ({ technical_analysis, best_practices }) => {
       <Divider />
 
       <Box>
-        <Typography variant="h6" sx={{ mb: 1 }}>
+        <Typography variant="h6" component="h3" id={`practices-heading-${page}`}>
           Best Practices
         </Typography>
-        <List dense disablePadding>
+        <List aria-labelledby={`practices-heading-${page}`} dense disablePadding>
           {isBestPracticesArray && best_practices.length > 0 ? (
             best_practices.map((practice, index) => (
               <ListItem key={index} sx={{ pl: 0 }}>
-                <Typography variant="body1" color="text.secondary" sx={{ textTransform: 'capitalize' }}>
+                <Typography variant="body1" color="text.secondary">
                   • {practice}
                 </Typography>
               </ListItem>

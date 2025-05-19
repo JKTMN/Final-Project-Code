@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Modal, Box, Typography, TextField, Button, IconButton, Divider } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { handleHealthCheck } from '../../functions/handleHealthCheck';
+import { validURL } from '../../functions/utilityFunctions';
 
 const modalStyle = {
   position: 'fixed',
@@ -14,16 +15,6 @@ const modalStyle = {
   boxShadow: 24,
   p: 3,
   zIndex: 9999
-};
-
-const validURL = (str) => {
-  var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-  return !!pattern.test(str);
 };
 
 /**
@@ -106,7 +97,16 @@ const ModalOverlay = ({ open, onClose }) => {
   const handleOpenCaptionGenerator = () => {
     if (chrome?.tabs?.create) {
       chrome.tabs.create({
-        url: chrome.runtime.getURL('index.html#/main-ui/caption-generator/')
+        url: chrome.runtime.getURL('index.html#/main-ui/alt-text-generator/')
+      });
+    }
+    onClose();
+  };
+
+  const handleOpenManualGuides = () => {
+    if (chrome?.tabs?.create) {
+      chrome.tabs.create({
+        url: chrome.runtime.getURL('index.html#/main-ui/guides/')
       });
     }
     onClose();
@@ -180,15 +180,26 @@ const ModalOverlay = ({ open, onClose }) => {
           </Button>
         </Box>
 
-        <Divider sx={{ my: 2 }} />
-
+        <Divider sx={{ my: 1 }} />
+        <Typography id="modal-title-2" variant="h6">Or use one of the other tools:</Typography>
         <Button
+          sx={{ my: 2}}
           variant="outlined"
           fullWidth
           onClick={handleOpenCaptionGenerator}
           aria-label="Open the alt text generator tool"
         >
           Open Alt-text Generator
+        </Button>
+
+        <Button
+          sx={{ my: 1}}
+          variant="outlined"
+          fullWidth
+          onClick={handleOpenManualGuides}
+          aria-label="Open the manual guides page"
+        >
+          Open Manual Guides
         </Button>
       </Box>
     </Modal>

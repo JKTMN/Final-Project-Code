@@ -9,10 +9,10 @@ import { Tooltip } from "@mui/material";
  * @param {String} toolTip - The tooltip text to be displayed on hover 
  * @returns The rendered InformationButton component
  */
-const InformationButton = ({ onClick, toolTip }) => {
+const InformationButton = ({ onClick, toolTip, colour }) => {
     return (
         <Tooltip title={toolTip} placement="top" arrow>
-            <InfoOutlinedIcon color="active" onClick={onClick}/>
+            <InfoOutlinedIcon color={colour ? colour : "black"} onClick={onClick}/>
         </Tooltip>
     );
 };

@@ -63,7 +63,7 @@ const ImageUploadForm = ({ imageUrl, handleUrlChange, handleFileChange, file, ha
         <Button
         variant="contained"
         onClick={handleSubmit}
-        disabled={!(file || imageUrl) || loading}
+        disabled={!(file || imageUrl.trim()) || loading}
         >
         {loading ? 'Loading...' : 'Generate Alt-text'}
         </Button>

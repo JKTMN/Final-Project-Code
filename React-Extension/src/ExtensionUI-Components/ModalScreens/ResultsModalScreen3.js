@@ -8,11 +8,15 @@ import { Box, Typography, List, ListItem, Divider, Paper } from '@mui/material';
  * 
  * @returns The rendered ResultsModalScreen3 component.
  */
-const ResultsModalScreen3 = ({ fixes, code_examples }) => {
+const ResultsModalScreen3 = ({ page, listItem, fixes, code_examples }) => {
   const isFixesArray = Array.isArray(fixes);
 
   return (
     <Box
+      id={`results-modal-page-${page}-content`}
+      role="region"
+      aria-labelledby="results-modal-title"
+      aria-live="polite"
       sx={{
         width: '100%',
         display: 'flex',
@@ -21,12 +25,18 @@ const ResultsModalScreen3 = ({ fixes, code_examples }) => {
       }}
     >
       <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, flexWrap: 'wrap' }}>
-        <Paper elevation={3} sx={{ p: 2, flex: 1, minWidth: '45%', bgcolor: 'grey.100' }}>
+        <Paper 
+          elevation={3} 
+          sx={{ p: 2, flex: 1, minWidth: '45%', bgcolor: 'grey.100' }}
+          aria-label="Inaccessible code example before fixes"
+        >
           <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
             Before
           </Typography>
           <Box
             component="pre"
+            role="region"
+            aria-label="Before fix code example"
             sx={{
               whiteSpace: 'pre-wrap',
               wordBreak: 'break-word',
@@ -42,12 +52,18 @@ const ResultsModalScreen3 = ({ fixes, code_examples }) => {
           </Box>
         </Paper>
 
-        <Paper elevation={3} sx={{ p: 2, flex: 1, minWidth: '45%', bgcolor: 'grey.100' }}>
+        <Paper 
+          elevation={3} 
+          sx={{ p: 2, flex: 1, minWidth: '45%', bgcolor: 'grey.100' }}
+          aria-label="Accessible code example after fixes"
+        >
           <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
             After
           </Typography>
           <Box
             component="pre"
+            role="region"
+            aria-label="After fix code example"
             sx={{
               whiteSpace: 'pre-wrap',
               wordBreak: 'break-word',
@@ -67,10 +83,10 @@ const ResultsModalScreen3 = ({ fixes, code_examples }) => {
       <Divider />
 
       <Box>
-        <Typography variant="h6" sx={{ mb: 1 }}>
+        <Typography variant="h6" component="h3" id={`fixes-heading-${page}`}>
           How to Fix
         </Typography>
-        <List dense disablePadding>
+        <List aria-labelledby={`fixes-heading-${page}`} dense disablePadding>
           {isFixesArray && fixes.length > 0 ? (
             fixes.map((item, index) => (
               <ListItem key={index} sx={{ pl: 0 }}>

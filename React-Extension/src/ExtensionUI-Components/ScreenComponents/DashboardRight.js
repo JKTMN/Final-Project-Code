@@ -19,7 +19,11 @@ const DashboardRight = ({ url, chosenList, auditResults }) => {
   const [violationHightlght, setViolationHighlight] = useState(false); //default to true
 
   return (
-    <Box sx={{ 
+    <Box
+    role="region"
+    aria-label="Rendered webpage preview"
+    tabIndex={0} 
+    sx={{ 
       width: "100%",
       height: "100%",
       display: "flex",
@@ -28,10 +32,6 @@ const DashboardRight = ({ url, chosenList, auditResults }) => {
       pt: isMobile ? 1 : 4,
       pb: isMobile ? 1 : 2,
     }}>
-      {/* <Box sx={{mb: 2,}}>
-        <HighlightSwitch setViolationHighlight={setViolationHighlight} selectedValue={chosenList}/>
-      </Box> */}
-
       <Box sx={{
         flex: 1,
         overflow: "hidden",

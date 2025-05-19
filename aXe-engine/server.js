@@ -23,7 +23,9 @@ const port = 3001;
 
 app.use(express.json());
 app.use(fileUpload());
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:3000','chrome-extension://pmgmglmdclpaipolmofbkjbigaabcohj']
+}));
 
 const validMimeTypes = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
 
@@ -95,6 +97,7 @@ const runAccessibilityAudit = async (url) => {
 
 
 app.post('/api/audit', async (req, res) => {
+    const start = Date.now();
     const { url } = req.body;
 
     if (!url) {
@@ -104,6 +107,8 @@ app.post('/api/audit', async (req, res) => {
     try {
         const auditResults = await runAccessibilityAudit(url);
         res.json(auditResults);
+        const end = Date.now();
+        console.log(`Image processed in ${end - start} ms`);
     } catch (error) {
         console.error('Error running accessibility audit:', error);
         res.status(500).json({ error: 'Failed to run accessibility audit' });
@@ -127,7 +132,7 @@ app.post('/api/caption/file', async (req, res) => {
       const imagePath = `./uploads/${Date.now()}_${image.name}`;
       await image.mv(imagePath);
   
-      const pythonProcess = spawn('python3', ['caption_generator.py', imagePath]);
+      const pythonProcess = spawn('python', ['caption_generator.py', imagePath]);
       let caption = '';
   
       pythonProcess.stdout.on('data', (data) => {
@@ -174,7 +179,7 @@ app.post('/api/caption/source', async (req, res) => {
       const buffer = Buffer.from(arrayBuffer);
       await fs.promises.writeFile(imagePath, buffer);
   
-      const pythonProcess = spawn('python3', ['caption_generator.py', imagePath]);
+      const pythonProcess = spawn('python', ['caption_generator.py', imagePath]);
       let caption = '';
   
       pythonProcess.stdout.on('data', (data) => {
@@ -269,7 +274,7 @@ app.post('/api/captions/website', async (req, res) => {
             return res.status(400).json({ error: 'No processable images found' });
         }
 
-        const pythonProcess = spawn('python3', ['caption_generator.py', ...tempPaths]);
+        const pythonProcess = spawn('python', ['caption_generator.py', ...tempPaths]);
         let output = '';
         let errorOutput = '';
 
@@ -297,7 +302,7 @@ app.post('/api/captions/website', async (req, res) => {
         const finalResults = results.filter(item => 
             item.src && item.caption && !item.caption.includes('Error')
         );
-
+        console.log(finalResults);
         res.json(finalResults);
         console.log(`Processed ${finalResults.length}/${tempPaths.length} images in ${Date.now() - start}ms`);
 

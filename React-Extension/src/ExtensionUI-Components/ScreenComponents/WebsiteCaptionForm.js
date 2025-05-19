@@ -44,7 +44,7 @@ const WebsiteCaptionForm = ({ websiteUrl, setWebsiteUrl, handleWebsiteSubmit, lo
         <Button
           variant="contained"
           onClick={handleWebsiteSubmit}
-          disabled={!websiteUrl}
+          disabled={!websiteUrl.trim()}
         >
           {loading ? 'Loading...' : 'Generate Alt-text For Your Website'}
         </Button>

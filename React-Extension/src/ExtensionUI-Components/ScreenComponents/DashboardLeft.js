@@ -21,7 +21,7 @@ import { calculateAccessibilityScore } from '../../functions/calculateAccessibil
  * 
  * @returns the rendered DashboardLeft component.
  */
-const DashboardLeft = ({ auditResults, url, chosenList, setChosenList }) => {
+const DashboardLeft = ({ auditResults, url, chosenList, setChosenList, headingRef }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const { passes = [], violations = [], incomplete = [], inapplicable = [], testsRan = [] } = auditResults || {};
@@ -78,6 +78,9 @@ const DashboardLeft = ({ auditResults, url, chosenList, setChosenList }) => {
             }}>
                 <Typography
                 variant={isMobile ? "h5" : "h4"}
+                id="main-title"
+                ref={headingRef}
+                tabIndex={-1}
                 sx={{ 
                     color: theme.palette.text.primary,
                     textAlign: 'center',

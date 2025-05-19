@@ -1,9 +1,11 @@
 /* global chrome */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Grid, useTheme, useMediaQuery } from '@mui/material';
 import { useOutletContext } from 'react-router-dom';
 import DashboardLeft from '../ScreenComponents/DashboardLeft';
 import DashboardRight from '../ScreenComponents/DashboardRight';
+import { useLocation } from 'react-router-dom';
+
 
 /**
  * Dashboard Component
@@ -25,6 +27,8 @@ const Dashboard = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [chosenList, setChosenList] = useState('passes');
+  const location = useLocation();
+  const headingRef = useRef(null);
 
   useEffect(() => {
     if (chrome?.storage?.local) {
@@ -33,6 +37,14 @@ const Dashboard = () => {
       });
     }
   }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (headingRef.current) {
+        headingRef.current.focus();
+      }
+    }, 500)
+  }, [theme]);
 
   return (
     <Grid container sx={{ height: 'auto', width: '100%', pl: 2}}>
@@ -44,7 +56,7 @@ const Dashboard = () => {
           height: '100%',
           display: 'flex'
         }}>
-        <DashboardLeft auditResults={auditResults} url={storedUrl} chosenList={chosenList} setChosenList={setChosenList}/>
+        <DashboardLeft auditResults={auditResults} url={storedUrl} chosenList={chosenList} setChosenList={setChosenList} headingRef={headingRef}/>
       </Grid>
       
       <Grid 

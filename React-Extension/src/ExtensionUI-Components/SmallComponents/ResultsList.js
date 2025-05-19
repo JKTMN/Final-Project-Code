@@ -119,7 +119,11 @@ const ResultsList = ({ title, listData, chosenList, filter }) => {
   });
 
   return (
-    <Box sx={{ 
+    <Box 
+    role="region"
+    aria-label={`${title} results list`}
+    tabIndex={0}
+    sx={{ 
       p: isMobile ? 1 : 2,
       width: '100%',
       overflow: 'hidden',
@@ -127,6 +131,22 @@ const ResultsList = ({ title, listData, chosenList, filter }) => {
       borderRadius: theme.shape.borderRadius,
       position: 'relative'
     }}>
+      <Box
+        aria-live="polite"
+        sx={{
+          position: 'absolute',
+          width: 1,
+          height: 1,
+          padding: 0,
+          margin: '-1px',
+          overflow: 'hidden',
+          clip: 'rect(0 0 0 0)',
+          whiteSpace: 'nowrap',
+          border: 0,
+        }}
+      >
+        Showing {filteredList.length} results for {title}
+      </Box>
       <Typography 
         variant={isMobile ? "h5" : "h4"} 
         sx={{ 
@@ -226,56 +246,76 @@ const ResultsList = ({ title, listData, chosenList, filter }) => {
           </Typography>
         ) : (
           filteredList.map((item) => (
-            <Card key={item.id} sx={getCardStyles()}>
-              <CardContent sx={{ p: 1 }}>
-                <Typography 
-                  variant={isMobile ? "subtitle1" : "h6"} 
-                  sx={{ 
-                    fontWeight: 600, 
-                    textAlign: "center",
-                    mb: 1,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap", 
-                  }}
-                >
-                  {removeHyphen(item.id)}
-                </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ marginBottom: 1 }}>
-                  <strong>Impact:</strong>
-                  <Typography variant="body1" sx={{ 
-                    color: 
-                      item.impact === "N/A" || item.impact === "minor" ? "green" :
-                      item.impact === "moderate" ? "orange" :
-                      item.impact === "serious" ? "red" :
-                      item.impact === "critical" ? "darkred" : "black", 
+          <Card
+            tabIndex={0}
+            key={item.id}
+            aria-labelledby={`card-title-${item.id}`}
+            aria-describedby={`card-desc-${item.id}`}
+            sx={getCardStyles()}
+          >
+            <CardContent sx={{ p: 1 }}>
+              <Typography
+                id={`card-title-${item.id}`}
+                variant={isMobile ? "subtitle1" : "h6"}
+                sx={{
+                  fontWeight: 600,
+                  textAlign: "center",
+                  mb: 1,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {removeHyphen(item.id)}
+              </Typography>
+
+              <Typography variant="body1" color="text.secondary" sx={{ marginBottom: 1 }}>
+                <strong>Impact:</strong>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color:
+                      item.impact === "N/A" || item.impact === "minor"
+                        ? "green"
+                        : item.impact === "moderate"
+                        ? "orange"
+                        : item.impact === "serious"
+                        ? "red"
+                        : item.impact === "critical"
+                        ? "darkred"
+                        : "black",
                     textTransform: "capitalize",
                     display: "inline",
-                    ml: 0.5
-                  }}>
-                    {item.impact}
-                  </Typography>
-                </Typography>
-                <Typography 
-                  variant="body2" 
-                  color="text.secondary" 
-                  sx={{ 
-                    textAlign: "center",
-                    fontSize: isMobile ? '0.8rem' : '0.95rem',
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    display: "-webkit-box",
-                    WebkitLineClamp: 3,
-                    WebkitBoxOrient: "vertical",
+                    ml: 0.5,
                   }}
                 >
-                  {item.description}
+                  {item.impact}
                 </Typography>
-              </CardContent>
+              </Typography>
+
+              <Typography
+                id={`card-desc-${item.id}`}
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  textAlign: "center",
+                  fontSize: isMobile ? "0.8rem" : "0.95rem",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: "vertical",
+                }}
+              >
+                {item.description}
+              </Typography>
+            </CardContent>
+
 
               <Box sx={{ display: "flex", justifyContent: "center" }}>
               <Button
                 variant="contained"
+                aria-label={`View more details about ${item.id}`}
                 size={isMobile ? "small" : "medium"}
                 sx={{
                   backgroundColor: theme.palette.primary.main,
