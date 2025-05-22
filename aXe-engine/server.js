@@ -4,84 +4,44 @@
  * @param {res} Object - The response object.
  * @returns {Object} - Returns an object containing the violations found in the audit.
  * Based on {@link https://github.com/dequelabs/axe-puppeteer}
+ * 
+ * @see https://www.npmjs.com/package/validator
  */
 const express = require('express');
 const puppeteer = require('puppeteer');
 const { AxePuppeteer } = require('axe-puppeteer');
 const cors = require('cors');
-const fetch = require('node-fetch');
+// const fetch = require('node-fetch');
 require('dotenv').config();
+const fileUpload = require('express-fileupload');
+const { spawn } = require('child_process');
+const fs = require('fs');
+const { isURL } = require('validator');
 
 const app = express();
 const port = 3001;
 
+app.use(express.json());
+app.use(fileUpload());
 app.use(cors({
     origin: ['http://localhost:3000','chrome-extension://pmgmglmdclpaipolmofbkjbigaabcohj']
 }));
 
-app.use(express.json());
+const validMimeTypes = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
 
-const HF_API_KEY = process.env.HUGGINGFACE_API_KEY;
-const HF_MODEL = process.env.HUGGINGFACE_MODEL;
-
-const defaultPrompt = require('./prompts/defaultViolationPrompt');
-
-// const generateFramework = async (item) => {
-//     if (!item) return [];
-
-//     const finalPrompt = `${defaultPrompt}\n\n### Audit data:\n${JSON.stringify(item, null, 2)}\n\n### Your response:\n`;
-//     try {
-//         const response = await fetch(`https://api-inference.huggingface.co/models/${HF_MODEL}`, {
-//             method: 'POST',
-//             headers: {
-//                 'Authorization': `Bearer ${HF_API_KEY}`,
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify({ inputs: finalPrompt })
-//         });
-
-//         if (!response.ok) {
-//             const errorText = await response.text();
-//             throw new Error(`Hugging Face API error: ${response.status} ${errorText}`);
-//         }
-
-//         const data = await response.json();
-//         const rawText = data?.[0]?.generated_text || '';
-
-//         console.log("Test: ", rawText[0])
+const path = require('path');
+const uploadDir = './uploads';
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+}
 
 
-//         const startIndex = rawText.indexOf('```json');
-//         const endIndex = rawText.lastIndexOf('```');
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'OK' });
+});
 
-//         const jsonString = (startIndex !== -1 && endIndex !== -1)
-//             ? rawText.substring(startIndex + 7, endIndex).trim()
-//             : rawText.trim();
-        
-//         let parsed;
-//         try {
-//             parsed = JSON.parse(jsonString);
-//         } catch (e) {
-//             console.error('JSON parse error:', e);
-//             return res.status(500).json({ error: 'Model returned invalid JSON', raw: rawText });
-//         }
 
-//         console.log("Parsed: ", parsed)
-//         return {
-//             explanation: parsed.issue_explanation,
-//             impact: parsed.impact,
-//             technicalAnalysis: parsed.technical_analysis,
-//             fixes: parsed.fixes,
-//             bestPractices: parsed.best_practices,
-//             codeExamples: parsed.code_examples,
-//             wcagGuidelines: parsed.wcag_guidelines,
-//         };
-//     } catch (error) {
-//         console.error('Error calling Hugging Face model:', error);
-//     }
-// };
-
-const formatResults = async (items, shouldGenerateFramework = false, pageUrl = '') => {
+const formatResults = async (items, pageUrl = '') => {
         const results = await Promise.all(items.map(async item => {
         const formattedItem = {
             id: item.id,
@@ -100,15 +60,15 @@ const formatResults = async (items, shouldGenerateFramework = false, pageUrl = '
             })) || [],
         };
     
-        // if (shouldGenerateFramework) {
-        //     formattedItem.generatedFramework = await generateFramework(item);
-        // }
-    
         return formattedItem;
         }));
     
         return results;
     };
+
+
+
+
 
 const runAccessibilityAudit = async (url) => {
     const browser = await puppeteer.launch();
@@ -118,17 +78,6 @@ const runAccessibilityAudit = async (url) => {
     const results = await new AxePuppeteer(page).analyze();
 
     await browser.close();
-
-    // const ruleIds = [
-    //     ...results.passes,
-    //     ...results.violations,
-    //     ...results.inapplicable,
-    //     ...results.incomplete
-    //   ].map(test => test.id);
-      
-    // const uniqueRuleIds = [...new Set(ruleIds)];
-
-    // console.log("Unique rule IDs: ", uniqueRuleIds);
 
     return {
         url,
@@ -145,7 +94,10 @@ const runAccessibilityAudit = async (url) => {
     };
 };
 
+
+
 app.post('/api/audit', async (req, res) => {
+    const start = Date.now();
     const { url } = req.body;
 
     if (!url) {
@@ -155,6 +107,8 @@ app.post('/api/audit', async (req, res) => {
     try {
         const auditResults = await runAccessibilityAudit(url);
         res.json(auditResults);
+        const end = Date.now();
+        console.log(`Image processed in ${end - start} ms`);
     } catch (error) {
         console.error('Error running accessibility audit:', error);
         res.status(500).json({ error: 'Failed to run accessibility audit' });
@@ -162,6 +116,207 @@ app.post('/api/audit', async (req, res) => {
 });
 
 
-app.listen(port, () => {
+
+
+app.post('/api/caption/file', async (req, res) => {
+    const start = Date.now();
+    try {
+      if (!req.files?.image) return res.status(400).send('No image uploaded');
+  
+      const image = req.files.image;
+  
+      if (!validMimeTypes.has(image.mimetype)) {
+        return res.status(415).json({ error: 'Unsupported file type' });
+      }
+  
+      const imagePath = `./uploads/${Date.now()}_${image.name}`;
+      await image.mv(imagePath);
+  
+      const pythonProcess = spawn('python', ['caption_generator.py', imagePath]);
+      let caption = '';
+  
+      pythonProcess.stdout.on('data', (data) => {
+        caption += data.toString();
+      });
+  
+      pythonProcess.on('close', (code) => {
+        fs.unlink(imagePath, (err) => {
+          if (err) console.error("Failed to delete uploaded file:", err);
+        });
+  
+        if (code !== 0) return res.status(500).send('Caption generation failed');
+        res.json({ caption: caption.trim() });
+        const end = Date.now();
+        console.log(`Image processed in ${end - start} ms`);
+      });
+    } catch (err) {
+      res.status(500).send('Server error');
+    }
+  });
+  
+
+
+
+
+
+app.post('/api/caption/source', async (req, res) => {
+    const start = Date.now();
+    try {
+      const { url } = req.body;
+      if (!url || !isURL(url, { protocols: ['http', 'https'], require_protocol: true })) {
+        return res.status(400).json({ error: 'Invalid URL' });
+      }
+
+      if (!url.match(/\.(jpe?g|png|webp)$/i)) {
+        return res.status(400).json({ error: 'URL must point to an image file' });
+      }
+  
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Failed to fetch image');
+      
+      const imagePath = `./uploads/${Date.now()}_url_image.jpg`;
+      const arrayBuffer = await response.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      await fs.promises.writeFile(imagePath, buffer);
+  
+      const pythonProcess = spawn('python', ['caption_generator.py', imagePath]);
+      let caption = '';
+  
+      pythonProcess.stdout.on('data', (data) => {
+        caption += data.toString();
+      });
+  
+      pythonProcess.on('close', (code) => {
+        fs.unlink(imagePath, (err) => {
+          if (err) console.error("Failed to delete temp file:", err);
+        });
+  
+        if (code !== 0) return res.status(500).send('Caption generation failed');
+        res.json({ caption: caption.trim() });
+        const end = Date.now();
+        console.log(`Image processed in ${end - start} ms`);
+      });
+  
+    } catch (err) {
+      res.status(500).send(`URL processing failed: ${err.message}`);
+    }
+  });
+
+
+
+
+
+const scrapeImageSources = async (url) => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    
+    try {
+        await page.goto(url);
+        const images = await page.$$eval('img', (imgs, pageUrl) => {
+            return imgs.map(img => {
+                try {
+                    const resolvedUrl = new URL(img.src, pageUrl).href;
+                    return { src: resolvedUrl, valid: true };
+                } catch (e) {
+                    return { src: img.src, valid: false, error: e.message };
+                }
+            });
+        }, url);
+        
+        return images.filter(img => img.valid);
+    } finally {
+        await browser.close();
+    }
+};
+
+
+
+
+
+app.post('/api/captions/website', async (req, res) => {
+    const start = Date.now();
+    const tempFiles = [];
+    const urlMap = new Map();
+
+    try {
+        const { url } = req.body;
+        if (!url || !isURL(url, { protocols: ['http', 'https'], require_protocol: true })) {
+            return res.status(400).json({ error: 'Invalid URL' });
+        }
+        const images = await scrapeImageSources(url);
+        const downloadPromises = images.map(async (img, index) => {
+            try {
+                const response = await fetch(img.src);
+                if (!response.ok) throw new Error('Failed to fetch image');
+                
+                const contentType = response.headers.get('content-type');
+                if (!validMimeTypes.has(contentType)) {
+                    throw new Error('Unsupported MIME type');
+                }
+
+                const arrayBuffer = await response.arrayBuffer();
+                const buffer = Buffer.from(arrayBuffer);
+                const imagePath = `./uploads/website_image_${Date.now()}_${index}_${Math.random().toString(36).slice(2, 7)}.jpg`;
+                
+                await fs.promises.writeFile(imagePath, buffer);
+                tempFiles.push(imagePath);
+                urlMap.set(imagePath, img.src);
+                
+                return imagePath;
+            } catch (err) {
+                console.error(`Skipping image ${img.src}:`, err.message);
+                return null;
+            }
+        });
+
+        const tempPaths = (await Promise.all(downloadPromises)).filter(Boolean);
+        if (tempPaths.length === 0) {
+            return res.status(400).json({ error: 'No processable images found' });
+        }
+
+        const pythonProcess = spawn('python', ['caption_generator.py', ...tempPaths]);
+        let output = '';
+        let errorOutput = '';
+
+        pythonProcess.stdout.on('data', (data) => output += data.toString());
+        pythonProcess.stderr.on('data', (data) => errorOutput += data.toString());
+
+        const results = await new Promise((resolve, reject) => {
+            pythonProcess.on('close', (code) => {
+                if (code !== 0) {
+                    return reject(new Error(`Python process failed: ${errorOutput}`));
+                }
+                
+                try {
+                    const parsed = JSON.parse(output);
+                    resolve(parsed.map(item => ({
+                        src: urlMap.get(item.path),
+                        caption: item.caption
+                    })));
+                } catch (e) {
+                    reject(new Error('Failed to parse Python output'));
+                }
+            });
+        });
+
+        const finalResults = results.filter(item => 
+            item.src && item.caption && !item.caption.includes('Error')
+        );
+        console.log(finalResults);
+        res.json(finalResults);
+        console.log(`Processed ${finalResults.length}/${tempPaths.length} images in ${Date.now() - start}ms`);
+
+    } catch (err) {
+        console.error('Website caption error:', err);
+        res.status(500).json({ error: err.message || 'Failed to process website images' });
+    } finally {
+        await Promise.allSettled(tempFiles.map(file => 
+            fs.promises.unlink(file).catch(() => {})
+        ));
+    }
+});
+
+
+app.listen(port, '0.0.0.0',() => {
     console.log(`Server running at http://localhost:${port}`);
 });
